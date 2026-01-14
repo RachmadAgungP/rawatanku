@@ -61,3 +61,4 @@ HTML
           publish_dir: build/web
           publish_branch: gh-pages
           keep_files: false
+\n# fixed: ensure proper YAML formatting and spacing
