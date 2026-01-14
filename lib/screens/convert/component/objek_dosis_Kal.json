@@ -1,0 +1,210 @@
+[
+    {
+        "idPerusahaan": 0,
+        "jenisPemupukan": "Niphos",
+        "data_dosis": {
+            "dasar": {
+                "petroganik": 0.00000,
+                "niphos": 0.00000,
+                "urea": 0.00000,
+                "kcl": 0.00000
+            },
+            "susulan I (20 HST)": {
+                "niphos": 0.00000,
+                "urea": 0.00000
+            },
+            "susulan II (35 HST)": {
+                "urea": 0.00000
+            }
+        },
+        "penjelas": "(Ditebar Di Lahan)",
+        "isExpanded": false
+    }
+]
+
+[
+    {
+        "index": "0",
+        "nama": "dataRumusPerKomoditiNingrat",
+        "data_input_komoditi": [
+            {
+                "id": 0,
+                "namaKomoditi": "Tembakau",
+                "img": "assets/images/komoditi/tembakau.png",
+                "satuan": "Kg/Ha",
+                "variabels": {
+                    "Const_Ng": [
+                        "Ningrat",
+                        450.0
+                    ],
+                    "Const_Za": [
+                        "ZA",
+                        100.0
+                    ],
+                    "Const_Or": [
+                        "Petroganik",
+                        1000.0
+                    ]
+                },
+                "fieldValue": [],
+                "takaran": {
+                    "dasar": {
+                        "petroganik": "Const_Or / 1"
+                    },
+                    "susulan I (5-7 HST)": {
+                        "nigrat": "Const_Ng / 2",
+                        "za": "Const_Za / 2"
+                    },
+                    "susulan II (21-25 HST)": {
+                        "nigrat": "Const_Ng / 2",
+                        "za": "Const_Za / 2"
+                    }
+                },
+                "hasil": {
+                    "dasar": {
+                        "petroganik": 0.0
+                    },
+                    "susulan I (5-7 HST)": {
+                        "nigrat": 0.0,
+                        "za": 0.0
+                    },
+                    "susulan II (21-25 HST)": {
+                        "nigrat": 0.0,
+                        "za": 0.0
+                    }
+                },
+                "penjelas": {
+                    "Cara Aplikasi": "pupuk dibenamkan dalam tanah di sekeliling pohon atau sekitar tanaman."
+                },
+                "category": 0
+            }
+        ],
+        "data_input_mediaTanam": [
+            {
+                "id": "0",
+                "nama": "Lahan Sawah",
+                "jenis": [
+                    "Lahan Rata",
+                    "Lahan Bedengan"
+                ]
+            },
+            {
+                "id": "1",
+                "nama": "Pot",
+                "jenis": [
+                    "Balok",
+                    "Kerucut Potong",
+                    "Setengah Bola",
+                    "Tabung",
+                    "ZonaBola"
+                ]
+            }
+        ],
+        "data_output": [
+            {
+                "id": 0,
+                "nama": "Kalkulasi Pupuk\nDengan Pupuk Ningrat",
+                "img": "",
+                "input": {
+                    "Luas Lahan": [],
+                    "Dosis Pupuk": [],
+                    "Dosis Pupuk per Lahan": [],
+                    "Luas Lahan input": [],
+                    "PLLahan": [
+                        0.0
+                    ]
+                },
+                "rumus": {
+                    "PLLahan": [
+                        "( Luas Lahan / 10000)"
+                    ],
+                    "Rumus Kalkulasi Pupuk Berdasarkan Anjuran Pupuk Petro Ningrat": [
+                        "Dosis Pupuk * PLLahan"
+                    ]
+                },
+                "perhitungan": {
+                    "PLLahan": [
+                        "Luas Lahan",
+                        "0.0"
+                    ],
+                    "keperluan": [
+                        "keperluan",
+                        [
+                            "1",
+                            "2"
+                        ]
+                    ]
+                },
+                "hasilAkhir": {
+                    "0": [
+                        "hasil proses 1",
+                        [
+                            0.0
+                        ]
+                    ]
+                }
+            }
+        ]
+    },
+    {
+        "index": "1",
+        "nama": "dataRumusPerKomoditiNitrat",
+        "data_input": [
+            {
+                "id": 0,
+                "namaKomoditi": "Kentang",
+                "img": "assets/images/komoditi/kentang.png",
+                "satuan": "Kg/Ha",
+                "variabels": {
+                    "Const_Nk": [
+                        "Phonska Plus",
+                        1000.0
+                    ],
+                    "Const_Za": [
+                        "ZA",
+                        200.0
+                    ],
+                    "Const_Zk": [
+                        "ZK",
+                        100.0
+                    ],
+                    "Const_Or": [
+                        "Petroganik",
+                        2000.0
+                    ]
+                },
+                "fieldValue": [],
+                "takaran": {
+                    "dasar": {
+                        "phonska plus": "Const_Nk / 2",
+                        "za": "Const_Za / 2",
+                        "zk": "Const_Zk / 2",
+                        "petroganik": "Const_Or / 1"
+                    },
+                    "susulan I (30 HST)": {
+                        "phonska plus": "Const_Nk / 2",
+                        "za": "Const_Za / 2",
+                        "zk": "Const_Zk / 2"
+                    }
+                },
+                "hasil": {
+                    "dasar": {
+                        "phonska plus": 500.0,
+                        "za": 100.0,
+                        "zk": 50.0,
+                        "petroganik": 2000.0
+                    },
+                    "susulan I (30 HST)": {
+                        "phonska plus": 500.0,
+                        "za": 100.0,
+                        "zk": 50.0
+                    }
+                },
+                "penjelas": {
+                    "Cara Aplikasi": "Ditebar / Dibenamkan"
+                },
+                "category": 0
+            }
+        ]
+    }
+]

@@ -1,0 +1,232 @@
+[
+    {
+      "id": 0,
+      "namaKomoditi": "Padi",
+      "img": "assets/images/komoditi/padi.png",
+      "satuan": "Kg/Ha",
+      "fieldValue": [],
+      "pengaplikasian": [
+        {
+          "id_perusahaan": 0,
+          "data_dosis": [
+            {
+              "id_dosis": 0,
+              "jenis pemupukan": "Niphos",
+              "variabels": {
+                "Const_Or": ["Petroganik", 500.0],
+                "Const_Np": ["Niphos", 250.0],
+                "Const_Ur": ["Urea", 200.0],
+                "Const_Kc": ["KCL", 75]
+              },
+              "takaran": {
+                "dasar": {
+                  "petroganik": "Const_Or / 1",
+                  "niphos": "Const_Np / 2",
+                  "urea": "Const_Ur / 4",
+                  "kcl": "Const_Kc / 1"
+                },
+                "susulan I (20 HST)": {
+                  "niphos": "Const_Np / 2",
+                  "urea": "Const_Ur / 4"
+                },
+                "susulan II (35 HST)": {
+                  "urea": "Const_Ur / 2"
+                }
+              },
+              "hasil": {
+                "dasar": {
+                  "petroganik": 500.0,
+                  "niphos": 125.0,
+                  "urea": 50.0,
+                  "kcl": 75.0
+                },
+                "susulan I (20 HST)": {
+                  "niphos": 125.0,
+                  "urea": 50.0
+                },
+                "susulan II (35 HST)": {
+                  "urea": 100.0
+                }
+              },
+              "penjelas": {"Cara Aplikasi": "Ditebar Di Lahan"}
+            },
+            {
+              "id_dosis": 1,
+              "jenis pemupukan": "Phonska Oca",
+              "variabels": {
+                "Const_Or": ["Petroganik", 500.0],
+                "Const_Ph": ["Phonska Plus", 300.0],
+                "Const_Ur": ["Urea", 200.0],
+                "Const_Oc": ["Oca", 5]
+              },
+              "takaran": {
+                "Persemaian": {
+                  "oca": "Const_Oc/10"
+                },
+                "dasar": {
+                  "petroganik": "Const_Or / 1",
+                  "urea": "Const_Ur / 4",
+                  "phonska": "Const_Ph / 2"
+                },
+                "susulan I (15-20 HST)": {
+                  "urea": "Const_Ur / 4",
+                  "phonska": "Const_Ph / 2",
+                  "oca": "Const_Oc / 2.5"
+                },
+                "susulan II (30-35 HST)": {
+                  "urea": "Const_Ur / 2",
+                  "oca": "Const_Oc / 2"
+                }
+              },
+              "hasil": {
+                "Persemaian": {
+                  "oca": 0.5
+                },
+                "dasar": {
+                  "petroganik": 500.0,
+                  "urea": 50.0,
+                  "phonska": 150.0
+                },
+                "susulan I (15-20 HST)": {
+                  "urea": 50.0,
+                  "phonska": 150.0,
+                  "oca": 2
+                },
+                "susulan II (30-35 HST)": {
+                  "urea": 100.0,
+                  "oca": 2.5
+                }
+              },
+              "penjelas": {
+                "Cara Aplikasi":
+                    "Larutan 1 tutp botol Phonska Oca dalam 2 liter air atau 1 botol Phonska Oca dalam 100 liter air\n Aplikasikan larutan tersebut dengan spray/disemprot/dikocor ke tanaman (permukaan daun, bunga dan buah) atau tanah sekitar perakaran tanaman \n Waktu aplikasi 2-3 minggu setelah tanam \n Dilakukan pengulangan dengan interval 2 minggu sekali"
+              }
+            },
+            {
+              "id_dosis": 2,
+              "jenis pemupukan": "Majemuk",
+              "variabels": {
+                "Const_Ur": ["Urea", 200.0],
+                "Const_Ph": ["Phonska Plus", 300.0]
+              },
+              "takaran": {
+                "dasar": {
+                  "urea": "Const_Ur / 4",
+                  "phonska": "Const_Ph / 2"
+                },
+                "HST20": {
+                  "urea": "Const_Ur / 4",
+                  "phonska": "Const_Ph / 2"
+                },
+                "HST35": {"urea": "Const_Ur / 2"}
+              },
+              "hasil": {
+                "dasar": {"urea": 50.0, "phonska": 150.0},
+                "HST20": {"urea": 50.0, "phonska": 150.0},
+                "HST35": {"urea": 100.0}
+              },
+              "penjelas": {
+                "**)": "Tanah Kahat Belerang 50kg Urea diganti dengan 100kg ZA"
+              }
+            },
+            {
+              "id_dosis": 3,
+              "jenis pemupukan": "Tunggal",
+              "variabels": {
+                "Const_Ur": ["Urea", 300.0],
+                "Const_Sp": ["Sp-36", 125.0],
+                "Const_KCL": ["KCL", 75.0]
+              },
+              "takaran": {
+                "dasar": {
+                  "urea": "Const_Ur / 3",
+                  "sp36": "Const_Sp / 1",
+                  "kcl": "Const_KCL / 1"
+                },
+                "HST20": {"urea": "Const_Ur / 3"},
+                "HST35": {"urea": "Const_Ur / 3"}
+              },
+              "hasil": {
+                "dasar": {"urea": 100.0, "sp36": 125.0, "kcl": 75.0},
+                "HST20": {"urea": 100.0},
+                "HST35": {"urea": 100.0}
+              },
+              "penjelas": {
+                "**)": "Tanah Kahat Belerang 50kg Urea diganti dengan 100kg ZA"
+              }
+            },
+            {
+              "id_dosis": 4,
+              "jenis pemupukan": "Berimbang",
+              "variabels": {
+                "Const_Pet": ["Petroganik", 500.0],
+                "Const_Ph": ["Phonska Plus", 300.0],
+                "Const_Ur": ["Urea", 200.0]
+              },
+              "takaran": {
+                "dasar": {
+                  "petroganik": "Const_Pet",
+                  "phonska": "Const_Ph / 2",
+                  "urea": "Const_Ur / 4"
+                },
+                "HST20": {
+                  "phonska": "Const_Ph / 2",
+                  "urea": "Const_Ur / 4"
+                },
+                "HST35": {"urea": "Const_Ur / 2"}
+              },
+              "hasil": {
+                "dasar": {"petroganik": 500.0, "urea": 50.0, "phonska": 150.0},
+                "HST20": {"urea": 50.0, "phonska": 150.0},
+                "HST35": {"urea": 100.0}
+              },
+              "penjelas": {
+                "**)": "Tanah Kahat Belerang 50kg Urea diganti dengan 100kg ZA"
+              }
+            }
+          ]
+        },
+        {
+          "id_perusahaan": 1,
+          "data_dosis": [
+            {
+              "id_dosis": 0,
+              "jenis pemupukan": "Meroke",
+              "variabels": {
+                "Const_Mp": ["Mutiara NPK pro", 250.0],
+                "Const_Ur": ["Urea", 200.0],
+                "Const_Kp": ["KARATE PLUS BORONI", 125.0]
+              },
+              "takaran": {
+                "14 HST": {
+                  "Mutiara NPK pro": "Const_Mp",
+                  "Urea": "Const_Ur"
+                },
+                "30 HST": {
+                  "Mutiara NPK pro": "Const_Mp",
+                  "Urea": "Const_Ur"
+                },
+                "45 HST": {
+                  "KARATE PLUS BORONI": "Const_Kp"
+                }
+              },
+              "hasil": {
+                "14 HST": {
+                  "Mutiara NPK pro": 100.0,
+                  "Urea": 100.0
+                },
+                "30 HST": {
+                  "Mutiara NPK pro": 150.0,
+                  "Urea": 100.0
+                },
+                "45 HST": {
+                  "KARATE PLUS BORONI": 125.0
+                }
+              },
+              "penjelas": {"": ""}
+            }
+          ]
+        }
+      ]
+    }
+  ]

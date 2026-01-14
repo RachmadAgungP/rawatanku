@@ -1,0 +1,89 @@
+1. cari / edit menu yang ditampilkan
+2. ganti
+Tumbuh :
+    1. c.indexMenuRawatan.value = 1;
+    2. ListView.builder(
+                                                 scrollDirection: Axis.horizontal,
+                                                 // physics: NeverScrollableScrollPhysics(),
+                                                 shrinkWrap: true,
+                                                 padding: EdgeInsets.zero,
+                                                 itemCount:
+                                                     dataKategoriMenuRawatan.length-1,
+                                                 itemBuilder: (context, indexds) {
+                                                   indexds +=1;
+                                                   // edit menu yang ditampilkan
+                                                   // if (indexds % 2 == 0) {
+                                                   return Padding(
+                                                     padding: EdgeInsets.only(
+                                                         right: defaultPadding),
+                                                     child: cardMenuRawatan(index: indexds, getindexmenu: (int indexmenu,int indexsubmenu) {
+                                                               setState(() {
+                                                                 indexmenuRawatans = indexmenu;
+                                                                 // indexsubmenuRawatan = indexsubmenu;
+                                                               });
+                                                             },
+                                                             ),
+                                                           );
+             // }
+             // else{
+             //                                         return Container();
+             //                                       }
+                                                 }),
+     3. flutter_native_splash:
+        image_path: assets/images/logo.png
+        android: true
+        #  ios: true
+        color: "#000000"
+        image: "assets/images/logo.png"
+
+
+     4. flutter_icons:
+        image_path: assets/images/logo.png
+        android: true
+ride :
+    1. c.indexMenuRawatan.value = 0;
+    2. ListView.builder(
+                                                 scrollDirection: Axis.horizontal,
+                                                 // physics: NeverScrollableScrollPhysics(),
+                                                 shrinkWrap: true,
+                                                 padding: EdgeInsets.zero,
+                                                 itemCount:
+                                                     dataKategoriMenuRawatan.length,
+                                                 itemBuilder: (context, indexds) {
+                                                   // edit menu yang ditampilkan
+                                                   if (indexds % 2 == 0) {
+                                                   return Padding(
+                                                     padding: EdgeInsets.only(
+                                                         right: defaultPadding),
+                                                     child: cardMenuRawatan(index: indexds, getindexmenu: (int indexmenu,int indexsubmenu) {
+                                                               setState(() {
+                                                                 indexmenuRawatans = indexmenu;
+                                                                 // indexsubmenuRawatan = indexsubmenu;
+                                                               });
+                                                             },
+                                                             ),
+                                                           );
+             }
+             else{
+                                                     return Container();
+                                                   }
+                                                 }),
+    3. flutter_native_splash:
+            image_path: assets/images/logoRide.png
+            android: true
+            #  ios: true
+            color: "#000000"
+            image: "assets/images/logoRide.png"
+
+
+    4. flutter_icons:
+        image_path: assets/images/logoRide.png
+        android: true
+
+    rawatan => rawatt
+
+1. dart run flutter_native_splash:create
+
+2. flutter pub run flutter_launcher_icons
+
+ganti rawatan

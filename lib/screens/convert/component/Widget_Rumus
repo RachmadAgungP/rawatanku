@@ -1,0 +1,2431 @@
+import 'dart:convert';
+
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+
+import 'package:rawatt/components/card_field.dart';
+import 'package:rawatt/components/inputan.dart';
+import 'package:rawatt/constants.dart';
+import 'package:rawatt/model/datafix.dart';
+import 'package:rawatt/model/kalkulator/mdl_KatMediatanam.dart';
+import 'package:rawatt/model/kalkulator/mdl_KatRumus.dart';
+import 'package:rawatt/rumus.dart';
+import 'package:rawatt/screens/convert/component/Widget_Jenis_Tanah.dart';
+import 'package:rawatt/screens/convert/component/inisialisasi_var.dart';
+import 'package:rawatt/screens/convert/screens/dosis_pupuk_tanaman/dosis_pupuk_tanaman.dart';
+import 'package:rawatt/size_config.dart';
+import 'package:flutter/material.dart';
+import 'package:function_tree/function_tree.dart';
+
+import '../../../components/card_penjelas.dart';
+import '../../../components/card_product.dart';
+import '../../../model/MenuRawatan/mdl_MenuRawatan.dart';
+import '../../../model/dosis/fieldku_campur.dart';
+import '../../../model/jenisMesin/mdl_JenisMesin.dart';
+import '../../../model/product/mdl_Produk.dart';
+import '../screens/majemuk2tunggal/majemuk2tunggal_display.dart';
+import '../screens/majemuk2tunggal/my_main.dart';
+import '../screens/tunggal2majemuk_display/my_mainT2M.dart';
+import '../screens/tunggal2majemuk_display/tunggal2majemuk_display.dart';
+import 'dart:developer' as developer;
+String sat = "m";
+
+Map<String, dynamic> datavalue(Map<dynamic, dynamic> jsonRumus, Map<dynamic, dynamic> jsonVar) {
+  Map<dynamic, dynamic> rumusSementara = jsonRumus;
+  Map<String, dynamic> pengaplikasian = {};
+  for (int i = 0; i < rumusSementara.length; i++) {
+    dynamic key = rumusSementara.keys.elementAt(i);
+    Map<dynamic, dynamic> valuet = rumusSementara[key.toString()];
+    //   print("$key = $valuet");
+    pengaplikasian[key] = {};
+    for (int it = 0; it < valuet.length; it++) {
+      // DecodedString result = decodeInputString(valuet.values.toList()[it]);
+
+      pengaplikasian[key][valuet.keys.toList()[it]] =
+          findAndStoreValue(jsonVar, valuet.values.toList()[it]);
+    }
+  }
+
+  return pengaplikasian;
+}
+
+void onPresosMtJ() {
+  cariVarUpdate("Popt", true, 1.0, "LMt/LJt", 0);
+}
+
+class DynamicFieldsWidget extends StatefulWidget {
+  final Map<String, int> dataMap;
+  final int indexobject;
+  final int? indexurutanrumus;
+  final String? ditanya;
+  final Function(Map hasil) onChange;
+
+  DynamicFieldsWidget(
+      {required this.dataMap,
+      required this.indexobject,
+      required this.indexurutanrumus,
+      required this.ditanya,
+      required this.onChange});
+
+  @override
+  _DynamicFieldsWidgetState createState() => _DynamicFieldsWidgetState();
+}
+
+Map<String, dynamic> convertToTextEditingController(Map<String, dynamic> data) {
+  Map<String, dynamic> result = {};
+
+  data.forEach((key, value) {
+    if (value is Map<String, dynamic>) {
+      result[key] = convertToTextEditingController(value);
+    } else {
+      result[key] = TextEditingController(text: value.toString());
+    }
+  });
+  print("harga $harga");
+  return result;
+}
+
+
+Map<String, dynamic>? Inputrumusmulti;
+Map<String, dynamic>? Outputrumusmulti;
+
+Map<dynamic, dynamic>? tampunghasil = {};
+
+List<dynamic>? kumpulanVarDitanya = [];
+
+Map<String, dynamic>? filteredOutputvarriabelmulti = {};
+Map<String, dynamic>? Inputvarriabelmulti;
+Map<String, dynamic>? Outputvarriabelmulti = {};
+// ValueNotifier<Map<String, dynamic>> _mapValueNotifier =
+//     ValueNotifier<Map<String, dynamic>>({'key': 'value'});
+List<String>? dropdownMultivar;
+ValueNotifier<String> dropdownNotifier = ValueNotifier<String>("");
+
+Map<String, TextEditingController> hargaObject = {};
+Map<String, TextEditingController> HargaObjectTakaran = {};
+Map<String, dynamic> HargaObjectTakaranAplikasi = {};
+
+class _DynamicFieldsWidgetState extends State<DynamicFieldsWidget> {
+  Map<String, dynamic>? invarriabelmulti;
+  Map<String, dynamic>? outvarriabelmulti;
+  Map<String, TextEditingController> hargaObjectTakaran = {};
+  Map<String, dynamic> hargaObjectTakaranAplikasi = {};
+
+  Map<String, TextEditingController> controllers = {};
+  Map<String, ValueNotifier<String>> dropdownValues = {};
+  List<dynamic> datadropdown = [];
+  TextEditingController? akhir;
+  List<dynamic>? objectRumusku;
+  Map<String, dynamic>? convertedMap;
+
+  Map<String, dynamic>? rumusmulti;
+
+  Map<String, ValueNotifier<String>> dropdownValuesMultivar = {};
+
+  void prosestampung() {
+    if (tampunghasil!.keys.toList().contains(widget.ditanya)) {
+      // Edit mengganti data yang sudah ada ditampungan yang terisi oleh hasil
+      objectRumusku![widget.indexurutanrumus!]
+              [widget.ditanya]![selectedMapIndex]
+          .valuess
+          .forEach((key, value) {
+        if (objectRumusku![widget.indexurutanrumus!]
+                    [widget.ditanya]![0]
+                .vari ==
+            "pengaplikasian") {
+          Inputrumusmulti = {};
+          rumusmulti = filterByKeyIndex(
+              convertedMap!,
+              dropdownValuesMultivar['Dropdown ${widget.indexurutanrumus}']!
+                  .value);
+          Inputrumusmulti = rumusmulti;
+          // hargaObjectTakaranAplikasi[value[0]] = TextEditingController(text: (value[1]*double.tryParse(hargaObject[value[0]]!.text.toString())).toString());
+
+          developer.log("$Inputrumusmulti!", name: "Inputrumusmulti121");
+          Outputrumusmulti = {};
+          Outputrumusmulti = datavalue(Inputrumusmulti!.values.last, Outputvarriabelmulti!)!;
+          print("Outputvarriabelmulti${Outputvarriabelmulti}");
+        }
+        //   // (LMt/10000)*JPk
+        if (key == "JPk" &&
+            objectRumusku![widget.indexurutanrumus!]
+                        [widget.ditanya]![selectedMapIndex]
+                    .outputobject ==
+                true &&
+            objectRumusku![widget.indexurutanrumus!]
+                        [widget.ditanya]![selectedMapIndex]
+                    .outputmulti ==
+                true) {
+          print(
+              "coba cek ${objectRumusku![widget.indexurutanrumus!][widget.ditanya]![selectedMapIndex].rumus}");
+          outvarriabelmulti = {};
+          hargaObjectTakaran = {};
+          int indexsd = 0;
+          Inputvarriabelmulti!.forEach((key, nilai) {
+            value[1] = nilai[1];
+            print(value[1]);
+            // Map variabledalam = objectRumusku![widget.indexurutanrumus!][widget.ditanya]![selectedMapIndex].valuess;
+            double hasilrumus = carupdate(
+                widget.ditanya!,
+                objectRumusku![widget.indexurutanrumus!]
+                        [widget.ditanya]![selectedMapIndex]
+                    .valuess,
+                objectRumusku![widget.indexurutanrumus!]
+                        [widget.ditanya]![selectedMapIndex]
+                    .rumus,
+                widget.indexobject);
+
+            if (outvarriabelmulti == null || outvarriabelmulti!.isEmpty) {
+              outvarriabelmulti = {
+                key: [nilai[0], hasilrumus, nilai[2]]
+              };
+
+              hargaObjectTakaran = {
+                nilai[0]: TextEditingController(
+                    text: (hasilrumus *
+                            double.parse(
+                                hargaObject[nilai[0]]!.text.toString()))
+                        .toString())
+              };
+
+              // hargaObjectTakaranAplikasi[value[0]] = TextEditingController(text: (value[1]*double.tryParse(hargaObject[value[0]]!.text.toString())).toString());
+              // // Outputvarriabelmulti = {key:[nilai[0],hasilrumus,nilai[2]]};
+            } else {
+              outvarriabelmulti![key] =
+                  List<Object>.of([nilai[0], hasilrumus, nilai[2]]);
+              print("hargaObject ${hargaObject}");
+              print("hargaObject12 ${hargaObject[nilai[0]]}");
+
+              hargaObjectTakaran[nilai[0]] = TextEditingController(
+                  text: (hasilrumus *
+                          double.parse(hargaObject[nilai[0]]!.text.toString()))
+                      .toString());
+              // hargaObjectTakaranAplikasi[value[0]] = TextEditingController(text: (value[1]*double.tryParse(hargaObject[value[0]]!.text.toString())).toString());
+
+              // Outputvarriabelmulti![key] = List<Object>.of([nilai[0],hasilrumus,nilai[2]]);
+            }
+
+            print(
+                "coba cek input ${nilai[0]} => ${nilai[1]} => $hasilrumus $outvarriabelmulti!");
+            indexsd += 1;
+          });
+          Outputvarriabelmulti = outvarriabelmulti;
+          HargaObjectTakaran = hargaObjectTakaran;
+        }
+        if (tampunghasil!.keys.toList().contains(key) &&
+            objectRumusku![widget.indexurutanrumus!]
+                        [widget.ditanya]![selectedMapIndex]
+                    .valuess[key] !=
+                0.0) {
+          setState(() {
+            if (objectRumusku![widget.indexurutanrumus!].keys.toList()[0] ==
+                "inputan") {
+            } else {
+              objectRumusku![widget.indexurutanrumus!]
+                      [widget.ditanya]![selectedMapIndex]
+                  .valuess[key] = tampunghasil![key];
+            }
+            objectRumusku![widget.indexurutanrumus!]
+                    [widget.ditanya]![selectedMapIndex]
+                .valuess
+                .forEach((key, value) {
+              controllers[key] =
+                  TextEditingController(text: value[1].toString());
+            });
+          });
+          //   widget.onChange(objectRumusku![widget.indexurutanrumus!][widget.ditanya]![selectedMapIndex]
+          //       .valuess);
+          print(
+              "tampungan dari ${widget.ditanya} ${objectRumusku![widget.indexurutanrumus!][widget.ditanya]![selectedMapIndex].valuess}");
+        }
+
+        //mendapatkan hasil akhir dalam tipe data double
+
+        tampunghasil![objectRumusku![widget.indexurutanrumus!]
+                [widget.ditanya]![selectedMapIndex]
+            .vari] = [
+          objectRumusku![widget.indexurutanrumus!]
+                  [widget.ditanya]![selectedMapIndex]
+              .vari,
+          carupdate(
+              objectRumusku![widget.indexurutanrumus!]
+                      [widget.ditanya]![selectedMapIndex]
+                  .vari,
+              objectRumusku![widget.indexurutanrumus!]
+                      [widget.ditanya]![selectedMapIndex]
+                  .valuess,
+              objectRumusku![widget.indexurutanrumus!]
+                      [widget.ditanya]![selectedMapIndex]
+                  .rumus,
+              widget.indexobject)
+        ];
+
+        // });
+      });
+    }
+    print("keseluuhan tampunghasil! $tampunghasil!");
+  }
+
+  void saveVarrrumus(String nilai, int indexurutanumus) {
+    // setState(() {
+    // print(
+    //     "tidak index ${objectRumusku![indexurutanumus][widget.ditanya]!.map((e) => variab(e.rumus))}");
+
+    //jika value variable kosong
+    if (objectRumusku![indexurutanumus][widget.ditanya]![selectedMapIndex]
+        .valuess
+        .isEmpty) {
+      if (objectRumusku![indexurutanumus][widget.ditanya]![0]
+              .vari ==
+          "pengaplikasian") {
+        // Inputrumusmulti = {};
+        // rumusmulti = filterByKeyIndex(
+        //     convertedMap!,
+        //     dropdownValuesMultivar['Dropdown ${widget.indexurutanrumus}']!
+        //         .value);
+        // Inputrumusmulti = rumusmulti;
+        // Outputrumusmulti = datavalue(Inputrumusmulti!.values.last, Outputvarriabelmulti!)!;
+        // print("rumusmulti => ${rumusmulti!} ${Inputrumusmulti}");
+        prosestampung();
+      } else {
+        int ro = 0;
+        objectRumusku![indexurutanumus][widget.ditanya]!.forEach((value) {
+          print(
+              "se belum${variab(objectRumusku![indexurutanumus][widget.ditanya]![ro].rumus, 0.0)}");
+
+          // tampunghasil!.forEach((key, value) {
+          //   print(
+          //       "lolas ${objectRumusku![indexurutanumus][widget.ditanya]![ro].valuess}");
+          //   if (objectRumusku![indexurutanumus][widget.ditanya]![ro].valuess.containsKey(key)) {
+          //     // objectRumusku![indexurutanumus][widget.ditanya]![ro].valuess![key] = value;
+          //     objectRumusku![indexurutanumus][widget.ditanya]![ro].valuess =
+          //         variab(objectRumusku![indexurutanumus][widget.ditanya]![ro].rumus,double.parse(value[1].toString()));
+          //   }else{
+          objectRumusku![indexurutanumus][widget.ditanya]![ro].valuess = variab(
+              objectRumusku![indexurutanumus][widget.ditanya]![ro].rumus, 0.0);
+          // }
+          // });
+          // print(
+          // "ses ${variab(objectRumusku![indexurutanumus][widget.ditanya]![ro].rumus)}");
+          ro += 1;
+        });
+      }
+    }
+
+    //jika value variable tidak kosong
+    else {
+      if (objectRumusku![indexurutanumus][widget.ditanya]![0]
+              .vari ==
+          "pengaplikasian") {
+        // Inputrumusmulti = {};
+        // rumusmulti = filterByKeyIndex(
+        //     convertedMap!,
+        //     dropdownValuesMultivar['Dropdown ${widget.indexurutanrumus}']!
+        //         .value);
+        // Inputrumusmulti = rumusmulti;
+        // print("rumusmulti => ${rumusmulti!} ${Inputrumusmulti}");
+        // Outputrumusmulti = datavalue(Inputrumusmulti!.values.last, Outputvarriabelmulti!)!;
+        prosestampung();
+      }
+      if (objectRumusku![widget.indexurutanrumus!][widget.ditanya]![0]
+          .valuess
+          .keys
+          .toList()
+          .contains("JPk")) {
+        print("LOL JPK");
+        prosestampung();
+
+        // HargaObjectTakaranAplikasi = hargaObjectTakaranAplikasi;
+      }
+      if (objectRumusku![widget.indexurutanrumus!].keys.toList()[0] ==
+          "inputan") {
+
+        prosestampung();
+        // Inputrumusmulti = {};
+        // rumusmulti = filterByKeyIndex(
+        //     convertedMap!,
+        //     dropdownValuesMultivar['Dropdown ${widget.indexurutanrumus}']!
+        //         .value);
+        // Inputrumusmulti = rumusmulti;
+        // // hargaObjectTakaranAplikasi[value[0]] = TextEditingController(text: (value[1]*double.tryParse(hargaObject[value[0]]!.text.toString())).toString());
+        //
+        // developer.log("$Inputrumusmulti!", name: "Inputrumusmulti121");
+        // Outputrumusmulti = {};
+        // Outputrumusmulti = datavalue(Inputrumusmulti!.values.last, Outputvarriabelmulti!)!;
+        Outputvarriabelmulti = outvarriabelmulti;
+
+        HargaObjectTakaran = hargaObjectTakaran;
+
+        print(
+            "Outputrumusmulti${Outputrumusmulti}");
+        // HargaObjectTakaranAplikasi = hargaObjectTakaranAplikasi;
+      } else {
+        objectRumusku![indexurutanumus][widget.ditanya]![selectedMapIndex]
+            .valuess[widget.ditanya] = [widget.ditanya, 0.0];
+        tampunghasil![widget.ditanya] = [widget.ditanya, 0.0];
+        prosestampung();
+        //     // cariVarUpdate(objectRumusku![indexurutanumus][widget.ditanya]![selectedMapIndex].vari, true, 1.0, objectRumusku![indexurutanumus][widget.ditanya]![selectedMapIndex].rumus, 0);
+        objectRumusku![indexurutanumus][widget.ditanya]![selectedMapIndex]
+            .valuess
+            .forEach((key, value) {
+          controllers[key] = TextEditingController(text: value[1].toString());
+        });
+
+        carupdate(
+            objectRumusku![widget.indexurutanrumus!]
+                    [widget.ditanya]![selectedMapIndex]
+                .vari, //ditanya
+            objectRumusku![widget.indexurutanrumus!]
+                    [widget.ditanya]![selectedMapIndex]
+                .valuess, //vaiable
+            objectRumusku![widget.indexurutanrumus!]
+                    [widget.ditanya]![selectedMapIndex]
+                .rumus, //rumus
+            widget.indexobject); // index media tanam
+
+        objectRumusku![widget.indexurutanrumus!]
+                [widget.ditanya]![selectedMapIndex]
+            .valuess[objectRumusku![widget.indexurutanrumus!]
+                [widget.ditanya]![selectedMapIndex]
+            .vari] = [
+          objectRumusku![widget.indexurutanrumus!]
+                  [widget.ditanya]![selectedMapIndex]
+              .vari,
+          carupdate(
+              objectRumusku![widget.indexurutanrumus!]
+                      [widget.ditanya]![selectedMapIndex]
+                  .vari,
+              objectRumusku![widget.indexurutanrumus!]
+                      [widget.ditanya]![selectedMapIndex]
+                  .valuess,
+              objectRumusku![widget.indexurutanrumus!]
+                      [widget.ditanya]![selectedMapIndex]
+                  .rumus,
+              widget.indexobject)
+        ];
+
+        print("data input => ${Inputvarriabelmulti!}");
+      }
+    }
+
+    // objectRumusku![widget.indexurutanrumus!][widget.ditanya]!
+    //     .map((ei) => ei.nama)
+    //     .toList()[selectedMapIndex]
+    // if (objectRumusku![widget.indexurutanrumus!].keys.toList()[0] !=
+    //     "inputan") {
+
+    // }
+    print(
+        "sesudah21 ${objectRumusku![indexurutanumus][widget.ditanya]![selectedMapIndex].valuess} ${objectRumusku![indexurutanumus][widget.ditanya]![selectedMapIndex].vari}");
+
+    // proses hasil
+
+    // isidata();
+
+    // int ro = 0;
+    // objectRumusku![indexurutanumus][widget.ditanya]!.forEach((value) {
+    //   print(
+    //       "se belum${variab(objectRumusku![indexurutanumus][widget.ditanya]![ro].rumus,0.0)}");
+    //   objectRumusku![indexurutanumus][widget.ditanya]![ro].valuess =
+    //       variab(objectRumusku![indexurutanumus][widget.ditanya]![ro].rumus,0.0);
+    //
+    //   ro += 1;
+    // });
+    //
+
+    // int ros = 0;
+    // objectRumusku![indexurutanumus][widget.ditanya]!.forEach((value) {
+    //   // print(
+    //   //     "se belum${variab(objectRumusku![indexurutanumus][widget.ditanya]![ros].rumus,0.0)}");
+    //
+    //   tampunghasil!.forEach((key, value) {
+    //     // print(
+    //     //     "lolas ${objectRumusku![indexurutanumus][widget.ditanya]![ros].valuess}");
+    //     if (objectRumusku![indexurutanumus][widget.ditanya]![ros].valuess.containsKey(widget.ditanya)) {
+    //       // objectRumusku![indexurutanumus][widget.ditanya]![ro].valuess![key] = value;
+    //       print("iniapa${value[1].runtimeType}");
+    //       objectRumusku![indexurutanumus][widget.ditanya]![ros].valuess =
+    //           variab(objectRumusku![indexurutanumus][widget.ditanya]![ros].rumus,double.parse(value[1].toString())!);
+    //
+    //     }
+    //   });
+    //   // print(
+    //   // "ses ${variab(objectRumusku![indexurutanumus][widget.ditanya]![ro].rumus)}");
+    //   ros += 1;
+    // });
+
+    print(
+        "lol${objectRumusku![indexurutanumus][widget.ditanya]![selectedMapIndex].valuess!}");
+
+    // saveVarrrumus(nilai);
+
+    // });
+    // objectRumusku![indexurutanumus][widget.ditanya]![selectedMapIndex].valuess[objectRumusku![indexurutanumus][widget.ditanya]![selectedMapIndex].vari] = ["",carupdate(objectRumusku![indexurutanumus][widget.ditanya]![selectedMapIndex].vari, objectRumusku![indexurutanumus][widget.ditanya]![selectedMapIndex].valuess, objectRumusku![indexurutanumus][widget.ditanya]![selectedMapIndex].rumus, widget.indexobject,selectedMapIndex)];
+
+    // akhir = TextEditingController(text:objectRumusku![indexurutanumus][widget.ditanya]![selectedMapIndex].valuess[objectRumusku![indexurutanumus][widget.ditanya]![selectedMapIndex].vari][1].toString());
+    // }
+  }
+
+  void ProsesDispose() {
+    // Dispose controllers to avoid memory leaks.
+    if (objectRumusku![widget.indexurutanrumus!].keys.toList()[0] ==
+        "inputan") {
+      hargaObject.forEach((key, controller) {
+        controller.dispose();
+      });
+    } else {
+      controllers.forEach((key, controller) {
+        controller.dispose();
+      });
+      dropdownValues.forEach((key, valueNotifier) {
+        valueNotifier.dispose();
+      });
+    }
+  }
+
+  Map<String, dynamic> filterByKeyIndex(
+      Map<String, dynamic> inputData, String keyIndex) {
+    Map<String, dynamic> result = {};
+    for (String key in inputData.keys.toList()) {
+      if (key == keyIndex) {
+        result[key] = inputData[key];
+      }
+    }
+    return result;
+  }
+
+  // JPk Inputan multi pupuk;
+  void inputMulti(String selected){
+    // Dropdown tipe Pemupukan ====================
+    // key
+    dropdownMultivar = objectRumusku![widget.indexurutanrumus!]
+    [widget.ditanya]![0]
+        .valuess
+        .keys
+        .toList();
+
+    // isi dari data dropdown
+    dropdownValuesMultivar = {
+      'Dropdown ${widget.indexurutanrumus}': ValueNotifier<String>(
+          selected),
+    };
+
+    // ====================
+    // Variable data input
+    invarriabelmulti = {};
+    // filter berdasarkan select dropdown
+    invarriabelmulti = filterByKeyIndex(
+        objectRumusku![widget.indexurutanrumus!][widget.ditanya]![0].valuess,
+        selected);
+    objectRumusku![widget.indexurutanrumus!][widget.ditanya]![0].valuess["Inputvarriabelmulti"] = {};
+    Inputvarriabelmulti = {}; //hapus
+    Inputvarriabelmulti = invarriabelmulti!.values.toList().last; //hapus
+    objectRumusku![widget.indexurutanrumus!][widget.ditanya]![0].valuess["Inputvarriabelmulti"] = invarriabelmulti!.values.toList().last;
+
+    Inputvarriabelmulti!.values.forEach((value) {
+      hargaObject[value[0]] = TextEditingController(text: 0.toString());
+    }); //hapus
+
+    objectRumusku![widget.indexurutanrumus!][widget.ditanya]![0].valuess["Inputvarriabelmulti"].keys.forEach((value) {
+      // hargaObject[value[0]] = TextEditingController(text: 0.toString());
+      objectRumusku![widget.indexurutanrumus!][widget.ditanya]![0].valuess["Inputvarriabelmulti"][value].add(TextEditingController(text: 0.toString())) ;
+    });
+
+    print("hargaObject $hargaObject");
+  }
+
+  void inputSingle(String selected){
+    print("ditanya${widget.ditanya}");
+    dropdownValuesMultivar = {
+      'Dropdown ${widget.indexurutanrumus}': ValueNotifier<String>(
+          selected),
+    };
+    // dropdownValues[
+    // 'Dropdown ${widget.indexurutanrumus}']!
+    //     .value = selected;
+
+    //jika value variable kosong
+    if (objectRumusku![widget.indexurutanrumus!][widget.ditanya]![selectedMapIndex]
+        .valuess
+        .isEmpty) {
+
+        int ro = 0;
+        objectRumusku![widget.indexurutanrumus!][widget.ditanya]!.forEach((value) {
+          // print(
+          //     "se belum${variab(objectRumusku![widget.indexurutanrumus!][widget.ditanya]![ro].rumus, 0.0)}");
+          objectRumusku![widget.indexurutanrumus!][widget.ditanya]![ro].valuess = variableTextEditing(
+              objectRumusku![widget.indexurutanrumus!][widget.ditanya]![ro].rumus, TextEditingController(text: 0.toString()));
+         ro += 1;
+        });
+
+    }
+    //jika value variable tidak kosong
+    else {
+      objectRumusku![widget.indexurutanrumus!][widget.ditanya]![selectedMapIndex]
+          .valuess[widget.ditanya] = [widget.ditanya, TextEditingController(text: 0.toString())];
+        // objectRumusku![widget.indexurutanrumus!][widget.ditanya]![selectedMapIndex]
+        //     .valuess[widget.ditanya] = [widget.ditanya, TextEditingController(text: 0.toString())];
+        // tampunghasil![widget.ditanya] = [widget.ditanya, 0.0];
+        // prosestampung();
+        //     // cariVarUpdate(objectRumusku![indexurutanumus][widget.ditanya]![selectedMapIndex].vari, true, 1.0, objectRumusku![indexurutanumus][widget.ditanya]![selectedMapIndex].rumus, 0);
+        // objectRumusku![widget.indexurutanrumus!][widget.ditanya]![selectedMapIndex]
+        //     .valuess
+        //     .forEach((key, value) {
+        //   controllers[key] = TextEditingController(text: value[1].toString());
+        // });
+        print("data input => ${objectRumusku![widget.indexurutanrumus!][widget.ditanya]![selectedMapIndex]
+            .valuess!}");
+        carupdateNew(
+            objectRumusku![widget.indexurutanrumus!]
+            [widget.ditanya]![selectedMapIndex]
+                .vari, //ditanya
+            objectRumusku![widget.indexurutanrumus!]
+            [widget.ditanya]![selectedMapIndex]
+                .valuess, //vaiable
+            objectRumusku![widget.indexurutanrumus!]
+            [widget.ditanya]![selectedMapIndex]
+                .rumus, //rumus
+            widget.indexobject); // index media tanam
+
+        objectRumusku![widget.indexurutanrumus!]
+        [widget.ditanya]![selectedMapIndex]
+            .valuess[widget.ditanya] = [widget.ditanya, TextEditingController(text: carupdateNew(
+            objectRumusku![widget.indexurutanrumus!]
+            [widget.ditanya]![selectedMapIndex]
+                .vari,
+            objectRumusku![widget.indexurutanrumus!]
+            [widget.ditanya]![selectedMapIndex]
+                .valuess,
+            objectRumusku![widget.indexurutanrumus!]
+            [widget.ditanya]![selectedMapIndex]
+                .rumus,
+            widget.indexobject).toString())];
+
+        print("data input => ${Inputvarriabelmulti!}");
+
+    }
+    print(
+        "sesudah21 ${objectRumusku![widget.indexurutanrumus!][widget.ditanya]![selectedMapIndex].valuess} ${objectRumusku![widget.indexurutanrumus!][widget.ditanya]![selectedMapIndex].vari}");
+    print(
+        "lol${objectRumusku![widget.indexurutanrumus!][widget.ditanya]![selectedMapIndex].valuess!}");
+
+  }
+
+
+  void ProsesInit() {
+    tampunghasil = {};
+    if (objectRumusku![widget.indexurutanrumus!].keys.toList()[0] ==
+        "inputan") {
+      inputMulti(objectRumusku![widget.indexurutanrumus!]
+      [widget.ditanya]![0]
+          .valuess
+          .keys
+          .toList()[0]);
+    }if (objectRumusku![widget.indexurutanrumus!].keys.toList()[0] ==
+        "LMt") {
+
+      inputSingle(objectRumusku![widget.indexurutanrumus!][widget.ditanya]!
+          .map((ei) => ei.nama)
+          .toList()[0]);
+    }if (objectRumusku![widget.indexurutanrumus!].keys.toList()[0] ==
+        "KPprLn") {
+      print("ditanya${widget.ditanya}");
+      // inputSingle(objectRumusku![widget.indexurutanrumus!][widget.ditanya]!
+      //     .map((ei) => ei.nama)
+      //     .toList()[0]);
+    }
+
+    // if (objectRumusku![widget.indexurutanrumus!]
+    // [widget.ditanya]![selectedMapIndex]
+    //     .vari ==
+    //     "pengaplikasian") {
+    //
+    //   dropdownValuesMultivar = {
+    //     'Dropdown ${widget.indexurutanrumus}': ValueNotifier<String>(
+    //         dropdownMultivar![selectedMapIndex].toString()),
+    //   };
+    //
+    //   convertedMap = json.decode(isJson(objectRumusku![widget.indexurutanrumus!]
+    //   [widget.ditanya]![selectedMapIndex]
+    //       .rumus));
+    //   rumusmulti = filterByKeyIndex(convertedMap!,
+    //       dropdownValuesMultivar['Dropdown ${widget.indexurutanrumus}']!.value);
+    //   Inputrumusmulti = rumusmulti;
+    //   print("1. Inputrumusmulti${Inputrumusmulti}");
+    //   print("Outputvarriabelmulti${Outputvarriabelmulti}");
+    //   Outputrumusmulti = datavalue(Inputrumusmulti!.values.last, Outputvarriabelmulti!)!;
+    //
+    //   // Outputrumusmulti!.keys.toList().asMap().forEach((index, element) {
+    //   //   Map<dynamic,dynamic>.of(Outputrumusmulti![element]).keys.toList().asMap().forEach((indexs, value) {
+    //   //     // hargaObject.keys.toList().forEach((elementi) {
+    //   //     //   if (elementi == Map<dynamic,dynamic>.of(Outputrumusmulti![element]).keys.toList()[indexs]){
+    //   //     //     print("hasilku takaran pupuk ->${Map.of(Outputrumusmulti![element]).values.toList()[indexs][0].toString().interpret()} harga takaran pupuk -> ${hargaObject[elementi]!.text}");
+    //   //         Outputrumusmulti![Outputrumusmulti!.keys.toList()[index]][Map<dynamic,dynamic>.of(Outputrumusmulti![element]).keys.toList()[indexs]] = [(Outputrumusmulti![element].values.toList()[indexs][0].toString()),Map.of(Outputrumusmulti![element]).values.toList()[indexs][1]];
+    //   //
+    //   //       // }
+    //   //
+    //   //     // });
+    //   //          });
+    //   //
+    //   // });
+    //
+    //   print("Outputrumusmulti!${{Inputrumusmulti!.keys.last:Outputrumusmulti!}}");
+    //
+    //   print("Inputrumusmulti!${Inputrumusmulti!}");
+    //
+    //   // hargaObjectTakaranAplikasi = Inputrumusmulti!;
+    //
+    //   hargaObjectTakaranAplikasi = Outputrumusmulti!;
+    //   HargaObjectTakaranAplikasi = hargaObjectTakaranAplikasi;
+    //
+    //
+    //   // TextEditingController(text: (value[1]*double.tryParse(hargaObject[value[0]]!.text.toString())).toString());
+    //
+    //   // hargaObjectTakaranAplikasi =
+    // }
+    // else {
+    //   if (List.of(objectRumusku![widget.indexurutanrumus!][widget.ditanya]![0]
+    //               .fieldValue
+    //               .toList())
+    //           .map((e) => e.keys.last)
+    //           .toList()
+    //           .contains("JPk") &&
+    //       objectRumusku![widget.indexurutanrumus!]
+    //                   [widget.ditanya]![selectedMapIndex]
+    //               .outputobject ==
+    //           true &&
+    //       objectRumusku![widget.indexurutanrumus!]
+    //                   [widget.ditanya]![selectedMapIndex]
+    //               .outputmulti ==
+    //           true) {
+    //     // outvarriabelmulti = {};
+    //     // if (Outputvarriabelmulti!.isEmpty) {
+    //     //   outvarriabelmulti = Inputvarriabelmulti;
+    //     //   Outputvarriabelmulti = outvarriabelmulti!;
+    //     //   HargaObjectTakaran = hargaObjectTakaran;
+    //     // }
+    //     // else{
+    //     //   Outputvarriabelmulti = outvarriabelmulti!;
+    //     // }
+    //     // print(
+    //     //     "${outvarriabelmulti}");
+    //     //
+    //     // Outputvarriabelmulti = outvarriabelmulti;
+    //   }
+    //
+    //   dropdownValues = {
+    //     'Dropdown ${widget.indexurutanrumus}': ValueNotifier<String>(
+    //         objectRumusku![widget.indexurutanrumus!][widget.ditanya]!
+    //             .map((ei) => ei.nama)
+    //             .toList()[selectedMapIndex]
+    //             .toString()),
+    //   };
+    //
+    //   dropdownValuesMultivar = {
+    //     'Dropdown ${widget.indexurutanrumus}': ValueNotifier<String>(
+    //         objectRumusku![widget.indexurutanrumus!][widget.ditanya]!
+    //             .map((ei) => ei.nama)
+    //             .toList()[selectedMapIndex]
+    //             .toString()),
+    //   };
+    //
+    //
+    //
+    //
+    //
+    //   datadropdown = objectRumusku![widget.indexurutanrumus!][widget.ditanya]!
+    //       .map((ei) => ei.nama)
+    //       .toList();
+    //
+    //   // fix
+    //   // saveVarrrumus("values", widget.indexurutanrumus!);
+    //
+    //   print(
+    //       "sengtemen2 ${widget.indexurutanrumus} ${objectRumusku![widget.indexurutanrumus!][widget.ditanya]!}");
+    // }
+
+    kumpulanVarDitanya = Map.of(
+            dataKategoriMenuRawatan[c.indexMenuRawatan.value]
+                .rumus[c.selectedItemCalcT.value])
+        .keys
+        .toList();
+  }
+
+  void ProsesWidget() {
+    if (objectRumusku![widget.indexurutanrumus!].keys.toList()[0] ==
+        "pengaplikasian") {
+      // saveVarrrumus("", widget.indexurutanrumus!);
+      int indexurutanumus = 0;
+      // saveVarrrumus("", widget.indexurutanrumus!);
+
+    } else if (objectRumusku![widget.indexurutanrumus!].keys.toList()[0] ==
+        "inputan") {
+
+    } else {
+      // saveVarrrumus("", widget.indexurutanrumus!);
+      int indexurutanumus = 0;
+    }
+  }
+
+  Widget? widgetProsesKu() {
+//     if (objectRumusku![widget.indexurutanrumus!].keys.toList()[0] ==
+//         "pengaplikasian") {
+//       // convertedMap = json.decode(isJson(objectRumusku![widget.indexurutanrumus!]
+//       //         [widget.ditanya]![selectedMapIndex]
+//       //     .rumus));
+//       // if (Inputrumusmulti!.isEmpty) {
+//       //   dropdownNotifier.value = dropdownMultivar![selectedMapIndex].toString();
+//       //   rumusmulti = filterByKeyIndex(convertedMap!, dropdownNotifier.value);
+//       //   Inputrumusmulti = rumusmulti;
+//       // }
+//
+//       return Column(
+//         children: [
+//           Padding(
+//             padding: EdgeInsets.symmetric(vertical: 8.0),
+//             child: Text(
+//               "Pengaplikasian",
+//               style: TextStyle(
+//                   color: Colors.green,
+//                   fontSize: 28,
+//                   fontWeight: FontWeight.bold),
+//             ),
+//           ),
+//           Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: List.generate(
+//                 Outputrumusmulti!
+//                     .keys
+//                     .toList()
+//                     .length, (index) {
+//               return Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Padding(
+//                     padding: EdgeInsets.symmetric(vertical: 8.0),
+//                     child: Text(
+//                       "${Outputrumusmulti!.keys.toList()[index]}",
+//                       style: TextStyle(
+//                           color: Colors.green,
+//                           fontSize: 28,
+//                           fontWeight: FontWeight.bold),
+//                     ),
+//                   ),
+//                   Column(
+//                       crossAxisAlignment: CrossAxisAlignment.start,
+//                       children: List.generate(
+//                           Outputrumusmulti!
+//                               .values
+//                               .toList()[index]
+//                               .keys
+//                               .toList()
+//                               .length, (indexs) {
+//                         return Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: [
+//                             Card(
+//                               elevation: 3,
+//                               child: Padding(
+//                                 padding: EdgeInsets.all(8.0),
+//                                 child: Column(
+//                                   crossAxisAlignment: CrossAxisAlignment.start,
+//                                   mainAxisAlignment:
+//                                       MainAxisAlignment.spaceAround,
+//                                   children: [
+//                                     Row(
+//                                       crossAxisAlignment:
+//                                           CrossAxisAlignment.start,
+//                                       children: [
+//                                         Expanded(
+//                                           flex: 2,
+//                                           child: Container(
+//                                             width: 100,
+//                                             height: 150,
+//                                             child: FittedBox(
+//                                               child: Container(
+//                                                 child: ProductListCard(
+//                                                   data: dataProductsObj
+//                                                       .where((element) =>
+//                                                           element.nama
+//                                                               .toString() ==
+//                                                               Outputrumusmulti!
+//                                                               .values
+//                                                               .toList()[index]
+//                                                               .keys
+//                                                               .toList()[indexs])
+//                                                       .last,
+//                                                   index: index,
+//                                                   press: () {
+// // prosesfield();
+//                                                   },
+//                                                   todetail: true,
+//                                                 ),
+//                                               ),
+//                                             ),
+//                                           ),
+//                                         ),
+//                                         Expanded(
+//                                           flex: 3,
+//                                           child: Padding(
+//                                             padding: EdgeInsets.symmetric(
+//                                                 horizontal: defaultPadding),
+//                                             child: Column(
+//                                               crossAxisAlignment:
+//                                                   CrossAxisAlignment.start,
+//                                               children: [
+//                                                 Padding(
+//                                                   padding: EdgeInsets.symmetric(
+//                                                       vertical:
+//                                                           defaultPadding / 2),
+//                                                   child: Text(
+//                                                     "${Outputrumusmulti!.values.toList()[index].keys.toList()[indexs]}",
+//                                                     style: TextStyle(
+//                                                         color: Colors.green,
+//                                                         fontSize: 20,
+//                                                         fontWeight:
+//                                                             FontWeight.w900),
+//                                                   ),
+//                                                 ),
+//                                                 Container(
+//                                                   height: 100,
+//                                                   width: 200,
+//                                                   // height: SizeConfig.screenHeight! / 1.2,
+//                                                   decoration: BoxDecoration(
+//                                                       color: Colors.green,
+//                                                       borderRadius:
+//                                                           const BorderRadius
+//                                                               .all(
+//                                                         Radius.circular(10),
+//                                                       ),
+//                                                       // border: Border.all(color: kTextColor.withOpacity(.8), width: .2),
+//                                                       boxShadow: [
+//                                                         BoxShadow(
+//                                                             blurRadius: 2,
+//                                                             offset:
+//                                                                 const Offset(
+//                                                                     0, 2),
+//                                                             color: Colors.black
+//                                                                 .withOpacity(
+//                                                                     .5))
+//                                                       ]),
+//                                                   child: Center(
+//                                                     child: Column(
+//                                                       crossAxisAlignment:
+//                                                           CrossAxisAlignment
+//                                                               .center,
+//                                                       mainAxisAlignment:
+//                                                           MainAxisAlignment
+//                                                               .center,
+//                                                       children: [
+//                                                         Text(
+//                                                           "${Outputrumusmulti!.values.toList()[index].values.toList()[indexs]} ",
+//                                                           style: TextStyle(
+//                                                               color:
+//                                                                   Colors.white,
+//                                                               fontSize: 24,
+//                                                               fontWeight:
+//                                                                   FontWeight
+//                                                                       .bold),
+//                                                         ),
+//                                                         Text(
+//                                                           "${Outputrumusmulti!.values.toList()[index].values.toList()[indexs]} ",
+//                                                           style: TextStyle(
+//                                                               color:
+//                                                                   Colors.white,
+//                                                               fontSize: 14,
+//                                                               fontWeight:
+//                                                                   FontWeight
+//                                                                       .bold),
+//                                                         ),
+//                                                       ],
+//                                                     ),
+//                                                   ),
+//                                                 ),
+//                                               ],
+//                                             ),
+//                                           ),
+//                                         ),
+//                                       ],
+//                                     ),
+//                                     Container(
+//                                         child: Column(
+//                                           children: [
+//                                             Text(
+//                                               "Harga ${HargaObjectTakaranAplikasi.values.toList()[0].values.toList()[index][0]} ${HargaObjectTakaranAplikasi.values.toList()[0].values.toList()[index][1]}",
+//                                               style: TextStyle(
+//                                                   color:
+//                                                   Colors.black,
+//                                                   fontSize: 24,
+//                                                   fontWeight:
+//                                                   FontWeight
+//                                                       .bold),
+//                                             ),
+//
+//                                           ],
+//                                         )
+//                                     ),
+//                                   ],
+//                                 ),
+//                               ),
+//                             ),
+//                           ],
+//                         );
+//                       })),
+//                 ],
+//               );
+//             }),
+//           ),
+//         ],
+//       );
+//     }
+    if (objectRumusku![widget.indexurutanrumus!].keys.toList()[0] ==
+        "inputan") {
+      return CardFields(
+        key: Key("${selectedMapIndex}"),
+        tema: Colors.green,
+        judul: "Pemupukan",
+        columns: Padding(
+            padding: EdgeInsets.only(
+                // horizontal: widthfit(defaultPadding / 2),
+                right: heightfit(defaultPadding),
+                left: heightfit(defaultPadding),
+                top: heightfit(defaultPadding)),
+            child: Container(
+              child: Column(
+                children: [
+                  DropDowns((newActivity) {
+                    setState(
+                      () {
+                        dropdownValuesMultivar[
+                                'Dropdown ${widget.indexurutanrumus}']!
+                            .value = newActivity!;
+
+                        widget.onChange(objectRumusku![widget.indexurutanrumus!]
+                        [widget.ditanya]![selectedMapIndex]
+                            .valuess);
+
+                        // 1. "inputan"
+                        inputMulti(newActivity!);
+                        print(" Input Simpan ${objectRumusku![widget.indexurutanrumus!][widget.ditanya]![0].valuess["Inputvarriabelmulti"].values.toList()}");
+                        dropdownNotifier.value = newActivity;
+                        // invarriabelmulti = {};
+                        // invarriabelmulti = filterByKeyIndex(
+                        //     objectRumusku![widget.indexurutanrumus!]
+                        //             [widget.ditanya]![0]
+                        //         .valuess,
+                        //     newActivity);
+                        //
+                        //
+                        //
+                        // print("kok${dropdownNotifier.value}");
+                        //
+                        // print(
+                        //     "kokY${objectRumusku![widget.indexurutanrumus!][widget.ditanya]![0].valuess}");
+                        //
+                        // // InputVar
+                        // Inputvarriabelmulti = {};
+                        // Inputvarriabelmulti =
+                        //     invarriabelmulti!.values.toList().last;
+                        //
+                        // hargaObject={};
+                        // Inputvarriabelmulti!.values.forEach((value) {
+                        //   hargaObject[value[0]] = TextEditingController(text: 0.toString());
+                        // });
+
+                        saveVarrrumus("", widget.indexurutanrumus!);
+
+
+                        // Pengaplikasian
+
+
+                        // Outputvarriabelmulti = outvarriabelmulti;
+                        // outvarriabelmulti = {};
+
+                        // Outputvarriabelmulti = outvarriabelmulti!;
+
+                        // Outputvarriabelmulti = Inputvarriabelmulti;
+                        // selectedMapIndex = objectRumusku![widget.indexurutanrumus!][widget.ditanya]!
+                        //     .map((ei) => ei.nama)
+                        //     .toList().indexOf(newActivity);
+                        // // saveVarrrumus();
+                        //
+                        // saveVarrrumus("", widget.indexurutanrumus!);
+
+                        // controllers = {};
+                        // objectRumusku![widget.indexurutanrumus!][widget.ditanya]![selectedMapIndex].valuess.forEach((key, value) {
+                        //   controllers[key] = TextEditingController(text: value[1].toString());
+                        //   print("sesudahw ${key} ${objectRumusku![widget.indexurutanrumus!][widget.ditanya]![selectedMapIndex].vari}");
+
+                        // });
+                        // dropdownValues['Dropdown ${widget.indexurutanrumus}']!.value = newActivity!;
+                      },
+                    );
+                  },
+                      Colors.black12,
+                      dropdownMultivar!,
+                      dropdownMultivar![0]
+                      // objectRumusku![widget.indexurutanrumus!][widget.ditanya]!
+                      // .map((ei) => ei.nama)
+                      // .toList()[0]
+                      ,
+                      dropdownValuesMultivar![
+                              'Dropdown ${widget.indexurutanrumus}']!
+                          .value,
+                      "Tipe Pemupukan",
+                      []),
+                  SizedBox(height: defaultPadding),
+                  Column(
+                    children: List.generate(
+                        Inputvarriabelmulti!.values.toList().length, (index) {
+                      return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            // height: 260,
+                            child: CardpHs(
+                                title:
+                                    "${Inputvarriabelmulti!.values.toList()[index][0]}: \n",
+                                hasilAkhir: "",
+                                sizes: sT18,
+                                texts:
+                                    "${Inputvarriabelmulti!.values.toList()[index][1]} ${Inputvarriabelmulti!.values.toList()[index][2]}",
+                                multitext: [],
+                                tema: warnas(
+                                    dataKategoriMenuRawatan[1].colorku[0]),
+                                cardornot: true,
+                                cardCostume: Container(
+                                  child: ProductListCard(
+                                    data: dataProductsObj
+                                        .where((element) =>
+                                            element.nama.toString() ==
+                                            Inputvarriabelmulti!.values
+                                                .toList()[index][0])
+                                        .last,
+                                    index: index,
+                                    press: () {
+// prosesfield();
+                                    },
+                                    todetail: true,
+                                  ),
+                                ),
+                                id: 0,
+                                widgetCostum: Container(
+                                    child: Fields(
+                                  controller: objectRumusku![widget.indexurutanrumus!][widget.ditanya]![0].valuess["Inputvarriabelmulti"].values.toList()[index][3]!,
+                                  satuan: "/Kg",
+                                  title:
+                                      "Harga ${objectRumusku![widget.indexurutanrumus!][widget.ditanya]![0].valuess["Inputvarriabelmulti"].values.toList()[index][0]}",
+                                  tema: Colors.black38,
+                                  onStateChange: (l) {
+                                    setState(() {
+                                      widget.onChange(objectRumusku![
+                                                      widget
+                                                          .indexurutanrumus!]
+                                                  [widget.ditanya]![
+                                              selectedMapIndex]
+                                          .valuess);
+                                      saveVarrrumus("",
+                                          widget.indexurutanrumus!);
+                                      // c.datadosis.value =
+                                      //     datafilterdosiss
+                                      //         .map((e) =>
+                                      //             e[indexw].dataDosis)
+                                      //         .toList()[indexw]
+                                      //         .values
+                                      //         .toList();
+                                      //
+                                      // prosesfield(index, l);
+                                      // datamultihargaku[index] = l;
+                                      // print("listcons $l");
+                                      // // harga[produk[index]]= formatRupiah((kebutuhans*(double.parse(sESUDAHdatamultihargaText[index].text.toString()))).toString());
+                                      // //   // onPreso(indexKes, indexMediaTanam, satuan);
+                                      // perhitungan(
+                                      //     widget.dataParent, indexw);
+                                    });
+                                  },
+                                  typeinput: TextInputType.number,
+                                  enable: true,
+                                ))),
+                          ));
+                    }),
+                  )
+                ],
+              ),
+            )),
+        onChangeState: () {},
+        indexmenu: c.indexMenuRawatan.value,
+        indexsubmenu: c.indexsubMenuRawatan.value,
+      );
+    }
+
+    else {
+      return CardFields(
+        key: Key("${selectedMapIndex}"),
+        tema: Colors.green,
+        judul: "Hitung Luas",
+        columns: Padding(
+            padding: EdgeInsets.only(
+                // horizontal: widthfit(defaultPadding / 2),
+                right: heightfit(defaultPadding),
+                left: heightfit(defaultPadding),
+                top: heightfit(defaultPadding)),
+            child: Container(
+              child: Column(
+                children: [
+                  (datadropdown!.length <= 1)
+                      ? Container()
+                      : DropDowns((newActivity) {
+                          setState(
+                            () {
+                              selectedMapIndex =
+                                  objectRumusku![widget.indexurutanrumus!]
+                                          [widget.ditanya]!
+                                      .map((ei) => ei.nama)
+                                      .toList()
+                                      .indexOf(newActivity);
+                              // saveVarrrumus();
+
+                              // fix
+                              // saveVarrrumus("", widget.indexurutanrumus!);
+
+                              dropdownValuesMultivar = {
+                                'Dropdown ${widget.indexurutanrumus}': ValueNotifier<String>(
+                                    newActivity!),
+                              };
+
+                              inputSingle(newActivity);
+
+                              controllers = {};
+                              objectRumusku![widget.indexurutanrumus!]
+                                      [widget.ditanya]![selectedMapIndex]
+                                  .valuess
+                                  .forEach((key, value) {
+                                controllers[key] = TextEditingController(
+                                    text: value[1].toString());
+                                print(
+                                    "sesudahw ${key} ${objectRumusku![widget.indexurutanrumus!][widget.ditanya]![selectedMapIndex].vari}");
+                              });
+
+
+                              dropdownValues[
+                                      'Dropdown ${widget.indexurutanrumus}']!
+                                  .value = newActivity!;
+                            },
+                          );
+                        },
+
+                          Colors.black12,
+                          datadropdown,
+                          datadropdown[0]
+                          // objectRumusku![widget.indexurutanrumus!][widget.ditanya]!
+                          // .map((ei) => ei.nama)
+                          // .toList()[0]
+                          ,
+                      dropdownValuesMultivar['Dropdown ${widget.indexurutanrumus}']!
+                              .value
+                          // objectRumusku![widget.indexurutanrumus!][widget.ditanya]!
+                          //     .map((ei) => ei.nama)
+                          //     .toList()[selectedMapIndex]
+                          ,
+                          "Tipe media Tanam",
+                          []),
+                  SizedBox(height: defaultPadding),
+                  Column(
+                    children: controllers .keys.map((key) {
+                      // print("${Outputvarriabelmulti!}");
+                      return (key == "JPk" &&
+                              objectRumusku![widget.indexurutanrumus!]
+                                          [widget.ditanya]![selectedMapIndex]
+                                      .outputobject ==
+                                  true &&
+                              objectRumusku![widget.indexurutanrumus!]
+                                          [widget.ditanya]![selectedMapIndex]
+                                      .outputmulti ==
+                                  true)
+                          ? Column(
+                              children: List.generate(
+                                  Outputvarriabelmulti!.values.toList().length,
+                                  (index) {
+                                return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      // height: 260,
+                                      child: CardpHs(
+                                          title:
+                                              "${Outputvarriabelmulti!.values.toList()[index][0]}: \n",
+                                          hasilAkhir: "",
+                                          sizes: sT18,
+                                          texts:
+                                              "${Outputvarriabelmulti!.values.toList()[index][1]} ${Outputvarriabelmulti!.values.toList()[index][2]}",
+                                          multitext: [],
+                                          tema: warnas(
+                                              dataKategoriMenuRawatan[1]
+                                                  .colorku[0]),
+                                          cardornot: true,
+                                          cardCostume: Container(
+                                            child: ProductListCard(
+                                              data: dataProductsObj
+                                                  .where((element) =>
+                                                      element.nama.toString() ==
+                                                      Outputvarriabelmulti!
+                                                          .values
+                                                          .toList()[index][0])
+                                                  .last,
+                                              index: index,
+                                              press: () {
+// prosesfield();
+                                              },
+                                              todetail: true,
+                                            ),
+                                          ),
+                                          id: 0,
+                                          widgetCostum: Container(
+                                              child: Fields(
+                                            controller:
+                                                hargaObjectTakaran[
+                                                    Outputvarriabelmulti!
+                                                            .values
+                                                            .toList()[
+                                                        index][0]]!,
+                                            satuan:
+                                                "/${Outputvarriabelmulti!.values.toList()[index][1]} ${Outputvarriabelmulti!.values.toList()[index][2].toString().substring(0, 2)}",
+                                            title:
+                                                "Harga ${Outputvarriabelmulti!.values.toList()[index][0]} yang diperlukan",
+                                            tema: Colors.black38,
+                                            onStateChange: (l) {
+                                              setState(() {
+                                                // c.datadosis.value =
+                                                //     datafilterdosiss
+                                                //         .map((e) =>
+                                                //             e[indexw].dataDosis)
+                                                //         .toList()[indexw]
+                                                //         .values
+                                                //         .toList();
+                                                //
+                                                // prosesfield(index, l);
+                                                // datamultihargaku[index] = l;
+                                                // print("listcons $l");
+                                                // // harga[produk[index]]= formatRupiah((kebutuhans*(double.parse(sESUDAHdatamultihargaText[index].text.toString()))).toString());
+                                                // //   // onPreso(indexKes, indexMediaTanam, satuan);
+                                                // perhitungan(
+                                                //     widget.dataParent, indexw);
+                                              });
+                                            },
+                                            typeinput: TextInputType
+                                                .number,
+                                            enable: false,
+                                          ))),
+                                    ));
+                              }),
+                            )
+                          : (key == "KPprLn")
+                              ? Container()
+                              : Fields(
+                                  controller: controllers[key]!,
+                                  satuan: "",
+                                  title: List.of(objectRumusku![
+                                                  widget.indexurutanrumus!][
+                                              widget.ditanya]![selectedMapIndex]
+                                          .fieldValue
+                                          .toList())
+                                      .where(
+                                          (element) => element.keys.last == key)
+                                      .last
+                                      .values
+                                      .last,
+                                  tema: Colors.black54,
+                                  onStateChange: (values) {
+                                    setState(() {
+                                      // controllers[key]!.text = values;
+                                      print("klik");
+                                      objectRumusku![widget.indexurutanrumus!]
+                                                      [widget.ditanya]![
+                                                  selectedMapIndex]
+                                              .valuess[key][1] =
+                                          int.tryParse(values) ?? 0;
+                                      widget.onChange(objectRumusku![
+                                                  widget.indexurutanrumus!][
+                                              widget.ditanya]![selectedMapIndex]
+                                          .valuess);
+
+                                      // fix
+                                      // saveVarrrumus(
+                                      //     values, widget.indexurutanrumus!);
+                                    });
+                                  },
+                                  typeinput: TextInputType.numberWithOptions(
+                                      decimal: true),
+                                  enable: (key == widget.ditanya ||
+                                          kumpulanVarDitanya!.contains(key))
+                                      ? false
+                                      : true,
+                                );
+                    }).toList(),
+                  ),
+                  // Fields(
+                  //     controller: akhir!,
+                  //     satuan: "",
+                  //     title: "List.of(objectRumusku![widget.indexurutanrumus!][widget.ditanya]![selectedMapIndex].fieldValue.toList()).where((element) => element.keys.last ==  objectRumusku![widget.indexurutanrumus!][widget.ditanya]![selectedMapIndex].vari).last.values.last",
+                  //     tema: Colors.green,
+                  //     onStateChange: (values) {
+                  //       saveVarrrumus("0.0");
+                  //       // setState(() {
+                  //       // objectRumusku![widget.indexurutanrumus!][widget.ditanya]![selectedMapIndex].valuess[key][1] = int.tryParse(values) ?? 0;
+                  //       // saveVarrrumus();
+                  //     },
+                  //     typeinput: TextInputType.numberWithOptions(decimal: true), enable: false,),
+                ],
+              ),
+            )),
+        onChangeState: () {},
+        indexmenu: c.indexMenuRawatan.value,
+        indexsubmenu: c.indexsubMenuRawatan.value,
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    objectRumusku = filterdataParent[widget.indexobject].varii;
+    print("rols${objectRumusku![widget.indexurutanrumus!].keys.toList()[0]}");
+    //Object inputan,
+    ProsesInit();
+  }
+
+  @override
+  void dispose() {
+    ProsesDispose();
+    super.dispose();
+  }
+
+  int selectedMapIndex = 0;
+
+  // filterdataParent[widget.indexurutanrumus!].varii
+  @override
+  Widget build(BuildContext context) {
+    ProsesWidget();
+
+    // objectRumusku![selectedMapIndex].valuess[objectRumusku![selectedMapIndex].vari] =[objectRumusku![selectedMapIndex].vari,carupdate(objectRumusku![selectedMapIndex].vari,objectRumusku![selectedMapIndex].valuess, objectRumusku![selectedMapIndex].rumus, widget.indexurutanrumus!)];
+    return widgetProsesKu()!;
+  }
+}
+
+class FieldRumus extends StatefulWidget {
+  final String juduls;
+  final Color tema;
+  final String namaobj;
+  final int idTipeMediaTanam;
+  final String rumus;
+  final int indexmenu;
+  final int indexsubmenu;
+  final int indexobject;
+  final String ditanya;
+  final Function() onChangeState;
+
+  const FieldRumus({
+    Key? key,
+    required this.juduls,
+    required this.tema,
+    required this.onChangeState,
+    required this.namaobj,
+    required this.idTipeMediaTanam,
+    required this.rumus,
+    required this.indexmenu,
+    required this.indexsubmenu,
+    required this.indexobject,
+    required this.ditanya,
+    // required this.indexSubmenu
+  }) : super(key: key);
+
+  @override
+  _FieldRumusState createState() => _FieldRumusState();
+}
+
+class _FieldRumusState extends State<FieldRumus> {
+  // int indexKe = 0;
+  // changeSatuan(satuanm,
+  List<TextEditingController> myControlerssi(Map data) {
+    return List<TextEditingController>.generate(
+        data.length,
+        (i) => TextEditingController(
+            text: (data.values.elementAt(i)[1].toString())));
+  }
+
+  List<Widget> fieldso(
+      int indexKes, Map data, int indexMediaTanam, String satuan) {
+    List<Widget> fieldsss = [];
+
+    // setState(() {
+    // print("field sebelum ${widget.juduls[indexKes].fieldValue}");
+    fieldsss = List<Widget>.generate(data.length, (index) {
+      TextEditingController controllers = List<TextEditingController>.from(
+          filterdataParent[widget.indexobject]
+              .varii[indexKes]
+              .fieldValue)[index];
+      return Fields(
+        controller: controllers,
+        satuan: (widget.indexmenu == 0) ? "km" : "",
+        title: data.values.elementAt(index)[0].toString(),
+        tema: widget.tema,
+        onStateChange: (values) {
+          // setState(() {
+          onPreso(indexKes, indexMediaTanam, satuan);
+          c.layerinfo.value = false;
+          c.labelLayerinfo.value = filtersdata[indexMediaTanam].mediatanam;
+          // dataKategoriMediaTanam[selectedItemprev].mediatanam}
+          // print("indexMediaTanam - ${indexMediaTanam}");
+          // });
+        },
+        typeinput: TextInputType.numberWithOptions(decimal: true),
+        enable: true,
+      );
+    });
+    // });
+
+    return fieldsss;
+  }
+
+  void onPreso(int indexKe, int indexMediaTanam, String satuan) {
+    setState(() {
+      Map data = changeSatuan(satuanm,
+          variables(filterdataParent[widget.indexobject].varii[indexKe].rumus));
+      print("datanya ${data}");
+      filterdataParent[widget.indexobject]
+          .varii[indexKe]
+          .fieldValue
+          .asMap()
+          .forEach((index, element) {
+        data[data.keys.elementAt(index)][1] = double.tryParse(element.text);
+        filterdataParent[widget.indexobject].varii[indexKe].valuess = data;
+        // dataKategoriInisialisasi[dataKategoriInisialisasi
+        //         .where((element) => element.vari == data.keys.toList()[index])
+        //         .first
+        //         .id]
+        //     .nilai = double.tryParse(element.text)!;
+
+        myControlersso = myControlerssi(
+            filterdataParent[widget.indexobject].varii[indexKe].valuess);
+        filterdataParent[widget.indexobject].varii[indexKe].fieldValue =
+            myControlersso;
+
+        fieldo = fieldso(indexKe, data, indexMediaTanam, satuan);
+        cariVarUpdate("LMt", true, 1.0,
+            filterdataParent[widget.indexobject].varii[indexKe].rumus, 0);
+        print(
+            "Kategori Rumus sesuai id -> ${filterdataParent[widget.indexobject].varii[indexKe].valuess}");
+
+        double nilai1 = cariValue("LMt");
+
+        widget.onChangeState();
+      });
+    });
+  }
+
+  List<TextEditingController> myControlersso = [];
+  List<Widget> fieldo = [];
+  Map dataVariabel = {};
+  int indexMediaTanam = 0;
+
+  @override
+  void initState() {
+    filtersdata = dataKategoriJenisPerhitungan
+        .where((element) =>
+            element.id_menurawatan == c.indexMenuRawatan.value.toString())
+        .toList();
+    super.initState();
+    filterdataParent[widget.indexobject].varii[drop].valuess =
+        variables(filterdataParent[widget.indexobject].varii[drop].rumus);
+
+    dataVariabel =
+        variables(filterdataParent[widget.indexobject].varii[drop].rumus);
+    myControlersso = myControlerssi(
+        filterdataParent[widget.indexobject].varii[drop].valuess);
+    filterdataParent[widget.indexobject].varii[drop].fieldValue =
+        myControlersso;
+
+    fieldo = fieldso(drop, dataVariabel, indexMediaTanam, satuanm);
+  }
+
+  int iddataPerhitunganLuasMediaTanam = 0;
+
+  // int indexrumusMediaTanam = drop;
+  int indexrumusMediaTanamfix = droping;
+  List dataidrumus = [droping];
+  List dropdownSatuan = [];
+
+  String rumus_Akhir = "";
+
+  Map<dynamic, dynamic> changeSatuan(
+      String satuanms, Map<dynamic, dynamic> datavarrINPUT) {
+    Map<dynamic, dynamic> datavarr = datavarrINPUT;
+
+    if (satuanms == "m") {
+      datavarr.forEach((key, value) {
+        setState(() {
+          double po = (value[1].runtimeType.toString() == "String")
+              ? double.tryParse(value[1])
+              : value[1];
+
+          datavarr[key] = [value[0], (po).toString()];
+          print('centimeter $key:${[value[0], po / 100]}');
+        });
+      });
+      print('data cm $datavarr');
+      return datavarr;
+    } else {
+      datavarr.forEach((key, value) {
+        setState(() {
+          double po = (value[1].runtimeType.toString() == "String")
+              ? double.tryParse(value[1])
+              : value[1];
+
+          datavarr[key] = [value[0], (po / 100).toString()];
+        });
+      });
+
+      return datavarr;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    indexMediaTanam = widget.idTipeMediaTanam;
+
+    dropdownSatuan = ["cm", "m"];
+    // print("Tipe Media Tanam select-> ${dropdownKey}");
+
+    // mengambil id sesuai kategory media tanam
+    // ids = filterdataParent[widget.indexobject].varii
+    //     .where((e) => e.idMediaTanam == indexMediaTanam)
+    //     .map((ei) => ei.id)
+    //     .toList();
+
+    // print("Bentuk Media Tanam sesuai id Rumus-> ${ids}");
+
+    // indexrumusMediaTanam = ids[indexrumusMediaTanamfix];
+
+    dataidrumus = filterdataParent[widget.indexobject]
+        .varii
+        .map((ei) => ei.nama)
+        .toList();
+
+    rumus_Akhir = filterdataParent[widget.indexobject]
+        .varii[indexrumusMediaTanamfix]
+        .rumus;
+
+    // dataVariabel =
+    //     changeSatuan(satuanm, filterdataParent[widget.indexobject].varii[indexrumusMediaTanam].valuess);
+    //
+
+    return CardFields(
+      tema: widget.tema,
+      judul: widget.juduls,
+      columns: Padding(
+        padding: EdgeInsets.only(
+            // horizontal: widthfit(defaultPadding / 2),
+            right: heightfit(defaultPadding),
+            left: heightfit(defaultPadding),
+            top: heightfit(defaultPadding)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (widget.indexmenu != 0)
+              Container(
+                child: SwitchListTile(
+                    title: Text(
+                      satuanm,
+                      style: TextStyle(fontSize: heightfit(26)),
+                    ),
+                    // subtitle: Text("Satuan",style: TextStyle(fontSize: heightfit(26)),),
+                    value: c.checked.value,
+                    onChanged: (bool value) {
+                      setState(() {
+                        c.checked.value = value;
+                        satuanm = (value == true) ? "cm" : "m";
+                        c.satuan.value = (value == true) ? "cm" : "m";
+                        // changedatavalues(c.satuan.value);
+                        // dataVariabel = changeSatuan(satuanm, dataVariabel);
+                        // print("losd${dataVariabel}");
+                        print("${satuanm} ${c.satuan.value}$value");
+                        // onPreso(indexrumusMediaTanam, indexMediaTanam, satuanm);
+                        // print("losd${dataVariabel.values.map((e) => e)}");
+                      });
+                      // onPreso(indexrumusMediaTanam, indexMediaTanam, satuanm);
+                    }),
+              ),
+            Column(
+              children: [
+                DropDowns((newActivity) {
+                  setState(
+                    () {
+                      // filterdataParent[widget.indexobject].varii[indexrumusMediaTanam].valuess = variables(filterdataParent[widget.indexobject].varii[indexrumusMediaTanam].rumus);
+
+                      indexrumusMediaTanamfix =
+                          dataidrumus.indexOf(newActivity);
+                      c.indexselectmediaLahan.value = indexrumusMediaTanamfix;
+                      droping = indexrumusMediaTanamfix;
+                      drop = indexrumusMediaTanamfix;
+                      onPreso(indexrumusMediaTanamfix, indexrumusMediaTanamfix,
+                          satuanm);
+                      print("ll${drop}");
+
+                      // dataVariabel =filterdataParent[widget.indexobject].varii[indexrumusMediaTanamfix].valuess;
+                      // myControlersso = myControlerssi(filterdataParent[widget.indexobject].varii[indexrumusMediaTanamfix].valuess);
+                      // filterdataParent[widget.indexobject].varii[indexrumusMediaTanamfix].fieldValue = myControlersso;
+                      // fieldo =
+                      //     fieldso(indexrumusMediaTanamfix, dataVariabel, indexMediaTanam, satuanm);
+                      // dataVariabel = filterdataParent[widget.indexobject].varii[indexrumusMediaTanam].valuess;
+                    },
+                  );
+                },
+                    widget.tema,
+                    dataidrumus,
+                    dataidrumus[drop],
+                    dataidrumus[indexrumusMediaTanamfix],
+                    "Bentuk media Tanam", []),
+              ],
+            ),
+
+            // DropDowns((newActivity) {
+            //   setState(
+            //         () {
+            //       // c.satuan.value = newActivity;
+            //       sat = newActivity;
+            //       print(c.satuan.value);
+            //     },
+            //   );
+            // }, widget.tema, dropdownSatuan, c.satuan.value,
+            //     sat, "Tipe Satuan"),
+            Column(
+              children: fieldo,
+            ),
+            Padding(
+              padding:
+                  EdgeInsets.symmetric(horizontal: heightfit(defaultPadding)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                      "${filtersdata[indexMediaTanam].mediatanam} ${datakategorisubMenuRawatan.where((element) => element.id_MenuRawatan == widget.indexmenu.toString()).toList()[widget.indexsubmenu].namaKomoditi}",
+                      style: TextStyle(
+                          color: widget.tema,
+                          fontWeight: FontWeight.bold,
+                          fontSize: heightfit(20))),
+                  Container(
+                      // height: heightfit(100),
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: List<Widget>.from(dataVariabel.values
+                            // .asMap()
+                            .map((v) => RichText(
+                                  text: TextSpan(children: [
+                                    TextSpan(
+                                      text: (v[1].toString() != "" &&
+                                              v[1] != 0.0 &&
+                                              v[1] != 0 &&
+                                              v[1].toString() != "0" &&
+                                              v[1] != 0.0)
+                                          ? "${v[0]} : ${v[1]} ${(widget.indexmenu == 0) ? "km" : "m"}"
+                                          : "${v[0]} perlu diisi..",
+                                      style: TextStyle(
+                                          color: (v[1].toString() != "" &&
+                                                  v[1] != 0.0 &&
+                                                  v[1] != 0 &&
+                                                  v[1].toString() != "0" &&
+                                                  v[1] != 0.0)
+                                              ? widget.tema
+                                              : Colors.red,
+                                          fontSize: heightfit(20)),
+                                    )
+                                  ]),
+                                ))).toList(),
+                      ),
+                      RichText(
+                          text: TextSpan(children: [
+                        TextSpan(
+                          // edited
+                          text: "",
+                          // "${cariStringnamavar(filterdataParent[widget.indexobject].varii.where((element) => element.rumus == rumus_Akhir).toList().map((e) => e.vari).first)} ${cariValue(filterdataParent[widget.indexobject].varii.where((element) => element.rumus == rumus_Akhir).toList().map((e) => e.vari).first)} ${cariSatuan(filterdataParent[widget.indexobject].varii.where((element) => element.rumus == rumus_Akhir).toList().map((e) => e.vari).first)}\n}",
+                          // "${c.luasmediaTanam.value}",
+                          // (c.islabelLayer)?"${cariStringnamavar("LJt")} : ${cariValue("LMt")} ${c.satuan.value}³",
+                          //     ("${dataKategoriRumus.where((element) => element.rumus == widget.rumus).toList().map((e) => e.vari)} ${c.satuan.value == "cm" ? "${widget.dropdowns == true ? "${cariStringnamavar("LMt")} : ${cariValue("LMt") * 100}" : "${cariStringnamavar("LJt")} ${cariValue("LJt") * 100}"} cm² \n ${widget.dropdowns == true ? "${cariStringnamavar("LMt")} : ${cariValue("LMt")}" : "${cariStringnamavar("LJt")} ${cariValue("LJt")}"} m²" : "${widget.dropdowns == true ? "${cariStringnamavar("LMt")} : ${cariValue("LMt")}" : "${cariStringnamavar("LJt")} : ${cariValue("LJt")}"} m²"}"),
+                          style: TextStyle(
+                              color: widget.tema, fontSize: heightfit(20)),
+                        )
+                      ]))
+                    ],
+                  )),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      onChangeState: () {},
+      indexmenu: widget.indexmenu,
+      indexsubmenu: widget.indexsubmenu,
+    );
+  }
+}
+
+// digunakan untuk [Jenis dosis, Jenis Lahan, Jarak Tanam] pokok ada berat / Bedengan
+class ProsesWidgets extends StatefulWidget {
+  final String juduls;
+  final Color tema;
+  final String namaobj;
+  final int idTipeMediaTanam;
+  final String rumus;
+  final bool dropdowns;
+  final int indexmenu;
+  final int indexsubmenu;
+
+  // final int indexSubmenu;
+  final Function(int, int, String) onChangeState;
+
+  const ProsesWidgets({
+    Key? key,
+    required this.juduls,
+    required this.tema,
+    required this.onChangeState,
+    required this.namaobj,
+    required this.idTipeMediaTanam,
+    required this.rumus,
+    required this.dropdowns,
+    required this.indexmenu,
+    required this.indexsubmenu,
+    // required this.indexSubmenu
+  }) : super(key: key);
+
+  @override
+  _ProsesWidgetsState createState() => _ProsesWidgetsState();
+}
+
+String satuanm = "m";
+int drop = 0;
+int droping = 0;
+
+class _ProsesWidgetsState extends State<ProsesWidgets> {
+  // int indexKe = 0;
+  // changeSatuan(satuanm,
+  List<TextEditingController> myControlerssi(Map data) {
+    return List<TextEditingController>.generate(
+        data.length,
+        (i) => TextEditingController(
+            text: (data.values.elementAt(i)[1].toString())));
+  }
+
+  List<Widget> fieldso(
+      int indexKes, Map data, int indexMediaTanam, String satuan) {
+    List<Widget> fieldsss = [];
+
+    // setState(() {
+    // print("field sebelum ${widget.juduls[indexKes].fieldValue}");
+    fieldsss = List<Widget>.generate(data.length, (index) {
+      TextEditingController controllers = List<TextEditingController>.from(
+          dataKategoriRumus[indexKes].fieldValue)[index];
+      return Fields(
+        controller: controllers,
+        satuan: (widget.indexmenu == 0) ? "km" : "",
+        title: data.values.elementAt(index)[0].toString(),
+        tema: widget.tema,
+        onStateChange: (values) {
+          // setState(() {
+          onPreso(indexKes, indexMediaTanam, satuan);
+          c.layerinfo.value = false;
+          c.labelLayerinfo.value = filtersdata[indexMediaTanam].mediatanam;
+          // dataKategoriMediaTanam[selectedItemprev].mediatanam}
+          // print("indexMediaTanam - ${indexMediaTanam}");
+          // });
+        },
+        typeinput: TextInputType.numberWithOptions(decimal: true),
+        enable: true,
+      );
+    });
+    // });
+
+    return fieldsss;
+  }
+
+  void onPreso(int indexKe, int indexMediaTanam, String satuan) {
+    setState(() {
+      Map data =
+          changeSatuan(satuanm, variables(dataKategoriRumus[indexKe].rumus));
+      print("datanya ${data}");
+      dataKategoriRumus[indexKe].fieldValue.asMap().forEach((index, element) {
+        data[data.keys.elementAt(index)][1] = double.tryParse(element.text);
+
+        dataKategoriInisialisasi[dataKategoriInisialisasi
+                .where((element) => element.vari == data.keys.toList()[index])
+                .first
+                .id]
+            .nilai = double.tryParse(element.text)!;
+
+        myControlersso = myControlerssi(data);
+        dataKategoriRumus[indexKe].fieldValue = myControlersso;
+
+        fieldo = fieldso(indexKe, data, indexMediaTanam, satuan);
+        widget.dropdowns == true
+            ? cariVarUpdate(
+                "LMt", true, 1.0, dataKategoriRumus[indexKe].rumus, 0)
+            : {
+                cariVarUpdate(
+                    "LJt", true, 1.0, dataKategoriRumus[indexKe].rumus, 0),
+                cariVarUpdate(
+                    "KBBM", true, 1.0, dataKategoriRumus[indexKe].rumus, 0)
+              };
+
+        double nilai1 = cariValue("LMt");
+
+        widget.onChangeState(indexMediaTanam, indexKe, satuan);
+      });
+    });
+  }
+
+  List<TextEditingController> myControlersso = [];
+  List<Widget> fieldo = [];
+  Map dataVariabel = {};
+  int indexMediaTanam = 0;
+
+  @override
+  void initState() {
+    filtersdata = dataKategoriJenisPerhitungan
+        .where((element) =>
+            element.id_menurawatan == c.indexMenuRawatan.value.toString())
+        .toList();
+    super.initState();
+  }
+
+  int iddataPerhitunganLuasMediaTanam = 0;
+
+  int indexrumusMediaTanam = drop;
+  int indexrumusMediaTanamfix = droping;
+  List dataidrumus = [drop];
+  List dropdownKey = [];
+  List dropdownSatuan = [];
+  List ids = [];
+
+  String rumus_Akhir = "";
+
+  Map<dynamic, dynamic> changeSatuan(
+      String satuanms, Map<dynamic, dynamic> datavarrINPUT) {
+    Map<dynamic, dynamic> datavarr = datavarrINPUT;
+
+    if (satuanms == "m") {
+      datavarr.forEach((key, value) {
+        setState(() {
+          double po = (value[1].runtimeType.toString() == "String")
+              ? double.tryParse(value[1])
+              : value[1];
+
+          datavarr[key] = [value[0], (po).toString()];
+          print('centimeter $key:${[value[0], po / 100]}');
+        });
+      });
+      print('data cm $datavarr');
+      return datavarr;
+    } else {
+      datavarr.forEach((key, value) {
+        setState(() {
+          double po = (value[1].runtimeType.toString() == "String")
+              ? double.tryParse(value[1])
+              : value[1];
+
+          datavarr[key] = [value[0], (po / 100).toString()];
+        });
+      });
+
+      return datavarr;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    indexMediaTanam = widget.idTipeMediaTanam;
+    dropdownKey = [
+      filtersdata.map((e) => e.mediatanam).toList()[widget.idTipeMediaTanam]
+    ];
+    dropdownSatuan = ["cm", "m"];
+    // print("Tipe Media Tanam select-> ${dropdownKey}");
+
+    // mengambil id sesuai kategory media tanam
+    ids = dataKategoriRumus
+        .where((e) => e.idMediaTanam == indexMediaTanam)
+        .map((ei) => ei.id)
+        .toList();
+
+    // print("Bentuk Media Tanam sesuai id Rumus-> ${ids}");
+    if (c.selectedItemCalcT.value == 2) {
+      indexrumusMediaTanam = ids[indexrumusMediaTanamfix];
+    }
+    indexrumusMediaTanam = ids[indexrumusMediaTanamfix];
+
+    dataidrumus = dataKategoriRumus
+        .where((e) => e.idMediaTanam == indexMediaTanam)
+        .map((ei) => ei.nama)
+        .toList();
+
+    // print("Kategori Rumus sesuai id -> ${dataidrumus}");
+
+    if (widget.dropdowns == true) {
+      variables(dataKategoriRumus[indexrumusMediaTanam].rumus);
+      dataVariabel = dataKategoriRumus[indexrumusMediaTanam].valuess;
+      myControlersso = myControlerssi(dataVariabel);
+      dataKategoriRumus[indexrumusMediaTanam].fieldValue = myControlersso;
+      fieldo =
+          fieldso(indexrumusMediaTanam, dataVariabel, indexMediaTanam, satuanm);
+      rumus_Akhir = dataKategoriRumus[indexrumusMediaTanam].rumus;
+    } else {
+      indexrumusMediaTanam = dataKategoriRumus
+          .where((element) => element.rumus == widget.rumus)
+          .first
+          .id;
+      variables(widget.rumus);
+      dataVariabel = dataKategoriRumus[indexrumusMediaTanam].valuess;
+      myControlersso = myControlerssi(dataVariabel);
+      dataKategoriRumus
+          .where((element) => element.rumus == widget.rumus)
+          .first
+          .fieldValue = myControlersso;
+
+      indexMediaTanam = dataKategoriRumus
+          .where((element) => element.rumus == widget.rumus)
+          .first
+          .idMediaTanam;
+      fieldo = fieldso(
+          dataKategoriRumus
+              .where((element) => element.rumus == widget.rumus)
+              .first
+              .id,
+          dataVariabel,
+          indexMediaTanam,
+          satuanm);
+      rumus_Akhir = widget.rumus;
+    }
+    dataVariabel =
+        changeSatuan(satuanm, dataKategoriRumus[indexrumusMediaTanam].valuess);
+
+    return CardFields(
+      tema: widget.tema,
+      judul: widget.juduls,
+      columns: Padding(
+        padding: EdgeInsets.only(
+            // horizontal: widthfit(defaultPadding / 2),
+            right: heightfit(defaultPadding),
+            left: heightfit(defaultPadding),
+            top: heightfit(defaultPadding)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (widget.indexmenu != 0)
+              Container(
+                child: SwitchListTile(
+                    title: Text(
+                      satuanm,
+                      style: TextStyle(fontSize: heightfit(26)),
+                    ),
+                    // subtitle: Text("Satuan",style: TextStyle(fontSize: heightfit(26)),),
+                    value: c.checked.value,
+                    onChanged: (bool value) {
+                      setState(() {
+                        c.checked.value = value;
+                        satuanm = (value == true) ? "cm" : "m";
+                        c.satuan.value = (value == true) ? "cm" : "m";
+                        // changedatavalues(c.satuan.value);
+                        // dataVariabel = changeSatuan(satuanm, dataVariabel);
+                        // print("losd${dataVariabel}");
+                        print("${satuanm} ${c.satuan.value}$value");
+                        // onPreso(indexrumusMediaTanam, indexMediaTanam, satuanm);
+                        // print("losd${dataVariabel.values.map((e) => e)}");
+                      });
+                      // onPreso(indexrumusMediaTanam, indexMediaTanam, satuanm);
+                    }),
+              ),
+            (widget.dropdowns == true)
+                ? Column(
+                    children: [
+                      DropDowns((newActivity) {
+                        setState(
+                          () {
+                            indexMediaTanam = filtersdata
+                                .where((element) =>
+                                    element.mediatanam == newActivity)
+                                .first
+                                .id;
+
+                            dataidrumus = dataKategoriRumus
+                                .where((e) =>
+                                    filtersdata[e.idMediaTanam].mediatanam ==
+                                    newActivity)
+                                .map((ei) => ei.nama)
+                                .toList();
+                            // print("dataidrumus ${indexMediaTanam}");
+                            // print("dataidrumus ${dataidrumus}");
+
+                            ids = dataKategoriRumus
+                                .where((e) =>
+                                    filtersdata[e.idMediaTanam].mediatanam ==
+                                    newActivity)
+                                .map((ei) => ei.id)
+                                .toList();
+                            indexrumusMediaTanam = ids[0];
+                            onPreso(
+                                indexrumusMediaTanam, indexMediaTanam, satuanm);
+                          },
+                        );
+                      }, widget.tema, dropdownKey, dropdownKey[0],
+                          dropdownKey[0], "Tipe media Tanam", []),
+                      DropDowns((newActivity) {
+                        setState(
+                          () {
+                            indexrumusMediaTanamfix =
+                                dataidrumus.indexOf(newActivity);
+                            c.indexselectmediaLahan.value =
+                                indexrumusMediaTanamfix;
+                            droping = indexrumusMediaTanamfix;
+                            drop = indexrumusMediaTanamfix;
+                            print("ll${drop}");
+                            onPreso(ids[dataidrumus.indexOf(newActivity)],
+                                indexMediaTanam, satuanm);
+                          },
+                        );
+                      },
+                          widget.tema,
+                          dataidrumus,
+                          dataidrumus[drop],
+                          dataidrumus[ids.indexOf(indexrumusMediaTanam)],
+                          "Bentuk media Tanam", []),
+                    ],
+                  )
+                : Container(),
+            // DropDowns((newActivity) {
+            //   setState(
+            //         () {
+            //       // c.satuan.value = newActivity;
+            //       sat = newActivity;
+            //       print(c.satuan.value);
+            //     },
+            //   );
+            // }, widget.tema, dropdownSatuan, c.satuan.value,
+            //     sat, "Tipe Satuan"),
+            Column(
+              children: fieldo,
+            ),
+            Padding(
+              padding:
+                  EdgeInsets.symmetric(horizontal: heightfit(defaultPadding)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                      "${filtersdata[indexMediaTanam].mediatanam} ${datakategorisubMenuRawatan.where((element) => element.id_MenuRawatan == widget.indexmenu.toString()).toList()[widget.indexsubmenu].namaKomoditi}",
+                      style: TextStyle(
+                          color: widget.tema,
+                          fontWeight: FontWeight.bold,
+                          fontSize: heightfit(20))),
+                  Container(
+                      // height: heightfit(100),
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: List<Widget>.from(dataVariabel.values
+                            // .asMap()
+                            .map((v) => RichText(
+                                  text: TextSpan(children: [
+                                    TextSpan(
+                                      text: (v[1].toString() != "" &&
+                                              v[1] != 0.0 &&
+                                              v[1] != 0 &&
+                                              v[1].toString() != "0" &&
+                                              v[1] != 0.0)
+                                          ? "${v[0]} : ${v[1]} ${(widget.indexmenu == 0) ? "km" : "m"}"
+                                          : "${v[0]} perlu diisi..",
+                                      style: TextStyle(
+                                          color: (v[1].toString() != "" &&
+                                                  v[1] != 0.0 &&
+                                                  v[1] != 0 &&
+                                                  v[1].toString() != "0" &&
+                                                  v[1] != 0.0)
+                                              ? widget.tema
+                                              : Colors.red,
+                                          fontSize: heightfit(20)),
+                                    )
+                                  ]),
+                                ))).toList(),
+                      ),
+                      RichText(
+                          text: TextSpan(children: [
+                        TextSpan(
+                          // edited
+                          text:
+                              "${cariStringnamavar(dataKategoriRumus.where((element) => element.rumus == rumus_Akhir).toList().map((e) => e.vari).first)} ${cariValue(dataKategoriRumus.where((element) => element.rumus == rumus_Akhir).toList().map((e) => e.vari).first)} ${cariSatuan(dataKategoriRumus.where((element) => element.rumus == rumus_Akhir).toList().map((e) => e.vari).first)}\n}",
+                          // "${c.luasmediaTanam.value}",
+                          // (c.islabelLayer)?"${cariStringnamavar("LJt")} : ${cariValue("LMt")} ${c.satuan.value}³",
+                          //     ("${dataKategoriRumus.where((element) => element.rumus == widget.rumus).toList().map((e) => e.vari)} ${c.satuan.value == "cm" ? "${widget.dropdowns == true ? "${cariStringnamavar("LMt")} : ${cariValue("LMt") * 100}" : "${cariStringnamavar("LJt")} ${cariValue("LJt") * 100}"} cm² \n ${widget.dropdowns == true ? "${cariStringnamavar("LMt")} : ${cariValue("LMt")}" : "${cariStringnamavar("LJt")} ${cariValue("LJt")}"} m²" : "${widget.dropdowns == true ? "${cariStringnamavar("LMt")} : ${cariValue("LMt")}" : "${cariStringnamavar("LJt")} : ${cariValue("LJt")}"} m²"}"),
+                          style: TextStyle(
+                              color: widget.tema, fontSize: heightfit(20)),
+                        )
+                      ]))
+                    ],
+                  )),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      onChangeState: () {},
+      indexmenu: widget.indexmenu,
+      indexsubmenu: widget.indexsubmenu,
+    );
+  }
+}
+
+//
+// untuk proses kalkulasi dengan format lama
+class ProsesWidgetsold extends StatefulWidget {
+  final List dataproses;
+  final List datahasils;
+  final Color tema;
+  final String namaobj;
+  final int stateID;
+  final Function(int, List, List, List) onChangeState;
+
+  const ProsesWidgetsold(
+      {Key? key,
+      required this.dataproses,
+      required this.tema,
+      required this.onChangeState,
+      required this.namaobj,
+      required this.stateID,
+      required this.datahasils})
+      : super(key: key);
+
+  @override
+  _ProsesWidgetsoldState createState() => _ProsesWidgetsoldState();
+}
+
+class _ProsesWidgetsoldState extends State<ProsesWidgetsold> {
+  // int indexKe = 0;
+  List<TextEditingController> myControlerss(int indexKes) =>
+      List<TextEditingController>.generate(
+          widget.dataproses[indexKes].variabels.length,
+          (i) => TextEditingController(
+              text: (widget.dataproses[indexKes].variabels.values
+                  .elementAt(i)[1]
+                  .toString())));
+
+  List<Widget> fieldss(int indexKes) {
+    List<Widget> fieldsss = [];
+    setState(() {
+      fieldsss = List<Widget>.generate(
+          widget.dataproses[indexKes].variabels.length, (index) {
+        TextEditingController controllers = List<TextEditingController>.from(
+            widget.dataproses[indexKes].fieldValue)[index];
+        return Fields(
+          controller: controllers,
+          satuan: List.from(widget.dataproses[indexKes].variabels.keys
+                      .toList())[index] ==
+                  "berat"
+              ? "Kg"
+              : List.from(widget.dataproses[indexKes].variabels.keys.toList())[
+                          index] ==
+                      "TB_0"
+                  ? "Bedengan"
+                  : widget.dataproses[indexKes].satuan,
+          title: widget.dataproses[indexKes].variabels.values
+              .elementAt(index)[0]
+              .toString(),
+          tema: widget.tema,
+          onStateChange: (values) {
+            // setState(() {
+            onPress(indexKes);
+
+            // });
+          },
+          typeinput: TextInputType.numberWithOptions(decimal: true),
+          enable: true,
+        );
+      });
+    });
+    return fieldsss;
+  }
+
+  void onPress(indexKe) {
+    Map<String, dynamic> rumusku = Map.from(widget.datahasils[0].rumus);
+    Map<String, dynamic> rumuskuT2M = Map.from(widget.datahasils[0].rumus);
+    List datainput = [];
+    List dataprosess = [];
+    List datahasil = [];
+    print(
+        "keys ${List.from(widget.dataproses[indexKe].variabels.keys.toList()).last}");
+    setState(() {
+      widget.dataproses[indexKe].fieldValue.asMap().forEach((index, element) {
+        widget.dataproses[indexKe].variabels[
+                widget.dataproses[indexKe].variabels.keys.elementAt(index)][1] =
+            double.tryParse(element.text);
+        //  datainput = [panajng, lebar]
+        datainput.add(double.tryParse(element.text));
+
+        widget.dataproses[indexKe]
+                .hasil[widget.dataproses[indexKe].hasil.keys.elementAt(index)]
+            [1] = double.tryParse(element.text);
+
+        // satuan field
+        widget.dataproses[indexKe].perhitungan[
+                widget.dataproses[indexKe].perhitungan.keys.elementAt(index)]
+            [1] = List.from(widget.dataproses[indexKe].variabels.keys.toList())[
+                    index] ==
+                "berat"
+            ? "${element.text} Kg"
+            : List.from(widget.dataproses[indexKe].variabels.keys.toList())[
+                        index] ==
+                    "TB_0"
+                ? "${element.text} Bedengan"
+                : "${element.text} ${widget.dataproses[indexKe].satuan}";
+      });
+
+      dataprosess = Map.from(widget.dataproses[indexKe].rumusStr)
+          .values
+          .map((value) =>
+              "${convertRumus(widget.dataproses[indexKe].variabels, value[1])} = ${convertRumus(widget.dataproses[indexKe].variabels, value[1]).interpret().toDouble().toStringAsFixed(1)}")
+          .toList();
+
+      datahasil = Map.from(widget.dataproses[indexKe].rumusStr)
+          .values
+          .map((value) => double.tryParse(
+                  convertRumus(widget.dataproses[indexKe].variabels, value[1])
+                      .interpret()
+                      .toDouble()
+                      .toStringAsFixed(1))
+              ?.toDouble())
+          .toList();
+      widget.dataproses[indexKe].perhitungan["luas"][1] = dataprosess;
+      widget.dataproses[indexKe].hasilAkhir["0"][1] = datahasil;
+      widget.datahasils[indexKe].input["Senyawa Aktif"] = datahasil;
+      // print("ccobas ${datahasil}");
+      // print("sebelum ${widget.datahasils[indexKe].input}");
+
+      // print("sesudah ${widget.datahasils[indexKe].input}");
+
+      if (widget.datahasils[0].nama == "Kalkulasi Majemuk ke Tunggal") {
+        print("aktif vo");
+        List asi2 = convertListRumus(widget.datahasils[0].input,
+            List.from(rumusku["Rumus Kalkulasi Senyawa Aktif ke Pupuk"]));
+
+        widget.datahasils[0].hasilAkhir["0"][1] =
+            asi2.map((e) => e.toString().interpret().toDouble()).toList();
+
+        // List asi2 = convertListRumus(widget.datahasils[0].input,
+        //     List.from(rumusku["Rumus Kalkulasi Senyawa Aktif ke Pupuk"]));
+
+        datainputanGF.value = [
+          widget.dataproses[0].variabels["berat"][1].toInt(),
+          List.from(widget.dataproses[0].variabels.values)
+              .map((e) => e[1])
+              .toList(),
+          widget.dataproses[0].hasilAkhir["0"][1].map((e) => e).toList(),
+          widget.datahasils[0].hasilAkhir["0"][1]
+        ];
+      } else {
+        // print("aktif vso");
+        // print("sebelum ${widget.datahasils[0].input["Dosis Pupuk"]}");
+        gethasil();
+
+        // print("sesudah ${widget.datahasils[0].input["Dosis Pupuk"]}");
+        // print("sesudah ${widget.datahasils[0].input["SenyawaAktif"]}");
+      }
+      widget.onChangeState(indexKe, datainput, dataprosess, datahasil);
+    });
+  }
+
+  List<TextEditingController> myControlers = [];
+  List<Widget> fields = []; // penampungan inputan.
+  @override
+  Widget build(BuildContext context) {
+    int indexKe = widget.stateID;
+
+    myControlers = myControlerss(indexKe);
+
+    widget.dataproses[indexKe].fieldValue = myControlers;
+    fields = fieldss(indexKe);
+
+    return CardFields(
+      tema: widget.tema,
+      judul: widget.dataproses[indexKe].nama,
+      columns: Padding(
+        padding: EdgeInsets.only(top: heightfit(defaultPadding)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            widget.dataproses.map((e) => e.nama).toList().length > 1
+                ? DropDowns((newActivity) {
+                    // setState(
+                    //   () {
+                    indexKe = widget.dataproses
+                        .map((e) => e.nama)
+                        .toList()
+                        .indexOf(newActivity);
+                    myControlers = myControlerss(indexKe);
+                    widget.dataproses[indexKe].fieldValue = myControlers;
+                    fields = fieldss(indexKe);
+                    onPress(indexKe);
+                    //   },
+                    // );
+                  },
+                    widget.tema,
+                    widget.dataproses.map((e) => e.nama).toList(),
+                    widget.dataproses.map((e) => e.nama).toList()[0],
+                    widget.dataproses.map((e) => e.nama).toList()[indexKe],
+                    widget.namaobj, [])
+                : Container(),
+            Column(children: fields),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: defaultPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("${widget.dataproses[indexKe].nama}",
+                      style: TextStyle(
+                          color: widget.tema,
+                          fontWeight: FontWeight.bold,
+                          fontSize: heightfit(20))),
+                  Container(
+                      height: heightfit(80),
+                      child: ListView(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        children: List<Widget>.from(widget
+                            .dataproses[indexKe].perhitungan.values
+                            .map((v) => RichText(
+                                  text: TextSpan(children: [
+                                    TextSpan(
+                                      text: (v[1].toString() != "" &&
+                                              v[1].toString() != "0.0" &&
+                                              v[1].toString() != "0" &&
+                                              v[1] != "0 m" &&
+                                              v[1] != "0.0 m")
+                                          ? "${v[0]} : ${v[1]}"
+                                          : "Perlu Diisi..",
+                                      style: TextStyle(
+                                          color: widget.tema,
+                                          fontSize: heightfit(20)),
+                                    )
+                                  ]),
+                                ))).toList(),
+                      )),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      onChangeState: () {},
+      indexmenu: c.indexMenuRawatan.value,
+      indexsubmenu: c.indexsubMenuRawatan.value,
+    );
+  }
+}
