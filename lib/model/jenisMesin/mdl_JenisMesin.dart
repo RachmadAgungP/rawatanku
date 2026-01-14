@@ -1025,7 +1025,22 @@ class KategorisubMenuRawatan {
   String namaKomoditi;
   String img;
   String id_MenuRawatan;
-  IconData icon;
+  dynamic _iconRaw;
+  IconData get icon {
+    final v = _iconRaw;
+    if (v is IconData) return v;
+    if (v is int) return IconData(v, fontFamily: 'MaterialIcons');
+    if (v is String) {
+      final s = v.toLowerCase();
+      final hex = s.startsWith('0x') ? s.substring(2) : s;
+      final cp = int.tryParse(hex, radix: 16);
+      if (cp != null) return IconData(cp, fontFamily: 'MaterialIcons');
+      final maybeInt = int.tryParse(v);
+      if (maybeInt != null)
+        return IconData(maybeInt, fontFamily: 'MaterialIcons');
+    }
+    return Icons.help_outline;
+  }
 
   List<Map<String, dynamic>> variableKetetapan;
   Map<String, dynamic> media;
@@ -1035,16 +1050,17 @@ class KategorisubMenuRawatan {
       required this.namaKomoditi,
       required this.img,
       required this.id_MenuRawatan,
-      required this.icon,
+      required dynamic icon,
       required this.media,
-      required this.variableKetetapan});
+      required this.variableKetetapan})
+      : _iconRaw = icon;
 
   KategorisubMenuRawatan.fromJson(Map json)
       : id = json["id"],
         namaKomoditi = json["namaKomoditi"],
         img = json["img"],
         id_MenuRawatan = json["id_MenuRawatan"],
-        icon = json["icon"],
+        _iconRaw = json["icon"],
         media = json["media"],
         variableKetetapan = json["variableKetetapan"];
 
