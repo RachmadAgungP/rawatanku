@@ -30,10 +30,27 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build web release
-        run: flutter build web --release
+      - name: Build web release (verbose)
+        id: build
+        run: |
+          # Capture verbose build output even if it fails
+          flutter build web --release -v 2>&1 | tee build_logs.txt || true
+          # Set an output indicating whether build produced build/web
+          if [ -d build/web ]; then
+            echo "status=success" >> $GITHUB_OUTPUT
+          else
+            echo "status=failure" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: build_logs.txt
 
       - name: Prepare build for GitHub Pages
+        if: steps.build.outputs.status == 'success'
         run: |
           # Remove <base href="..."> if present (prevents incorrect absolute paths on GH Pages)
           if [ -f build/web/index.html ]; then
