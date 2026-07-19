@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="/">
+  <script>
+    (function () {
+      var baseTag = document.querySelector('base');
+      if (baseTag.getAttribute('href') === '/') {
+        var path = window.location.pathname;
+        if (window.location.hostname.includes('github.io')) {
+          var repoName = path.split('/')[1];
+          baseTag.setAttribute('href', '/' + repoName + '/');
+        } else if (path.includes('/web/')) {
+          baseTag.setAttribute('href', path.substring(0, path.lastIndexOf('/') + 1));
+        } else {
+          baseTag.setAttribute('href', '/');
+        }
+      }
+    }());
+  </script>
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Rawatan Apps - Solusi Pertanian Pintar">
+
+  <!-- iOS meta tags & icons --> 
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Rawatan Apps">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <title>Rawatan Apps</title>
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    body {
+      inset: 0; overflow: hidden; margin: 0; padding: 0; position: fixed;
+      background-color: #ffffff;
+    }
+    #splash {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      z-index: 999;
+    }
+    .logo {
+      width: 150px;
+      height: auto;
+      margin-bottom: 30px;
+      animation: pulse 2s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.8; }
+    }
+    .progress-container {
+      width: 240px;
+      height: 6px;
+      background-color: #f0f0f0;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .progress-bar {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #4CAF50, #8BC34A);
+      border-radius: 10px;
+      animation: indeterminate 2s infinite linear;
+      transform-origin: 0% 50%;
+    }
+    @keyframes indeterminate {
+      0% { transform: translateX(-100%) scaleX(0.2); }
+      50% { transform: translateX(0%) scaleX(0.5); }
+      100% { transform: translateX(100%) scaleX(0.2); }
+    }
+    .loading-text {
+      margin-top: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 16px;
+      color: #2E7D32;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+  </style>
+
+  <script src="flutter.js"></script>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+</head>
+<body>
+  <div id="splash">
+    <!-- Mencoba memuat logo dari folder assets. Jika gagal, coba path alternatif -->
+    <img class="logo" src="assets/images/logo.png" alt="Rawatan Logo"
+         onerror="if (this.src.indexOf('assets/assets/') == -1) this.src='assets/assets/images/logo.png';">
+
+    <div class="progress-container">
+      <div class="progress-bar"></div>
+    </div>
+    <div class="loading-text">MEMUAT RAWATAN...</div>
+  </div>
+
+  <script>
+    window.addEventListener('load', function(ev) {
+      var swVersion = `"40272357" /* Flutter's service worker is deprecated and will be removed in a future Flutter release. */`;
+      if (swVersion.includes('{{')) swVersion = null;
+
+      _flutter.loader.loadEntrypoint({
+        serviceWorker: {
+          serviceWorkerVersion: swVersion,
+        },
+        onEntrypointLoaded: function(engineInitializer) {
+          engineInitializer.initializeEngine().then(function(appRunner) {
+            appRunner.runApp().then(function() {
+              var splash = document.getElementById("splash");
+              if (splash) {
+                splash.style.transition = 'opacity 0.5s ease-out';
+                splash.style.opacity = '0';
+                setTimeout(() => splash.remove(), 500);
+              }
+            });
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

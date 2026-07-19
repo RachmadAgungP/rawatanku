@@ -1,0 +1,629 @@
+[
+  {
+  "pupuk":[
+    {
+      "nama": "Urea",
+      "title": "Pupuk Urea",
+      
+      "color": [
+        "049942",
+        "011d0d",
+        "034f23"
+      ],
+      "penjelas": "PT. Petrokimia Gresik",
+      "image": "assets/images/product/subnonsub_urea.png",
+      "brosure": ["assets/images/brosure/urea_1.jpg"],
+      "informasi": {
+        "spesifikasi": [
+          "Kadar air maksimal 0,50%",
+          "Kadar Biuret maksimal 1%",
+          "Kadar Nitrogen minimal 46%",
+          "Bentuk butiran tidak berdebu",
+          "Warna putih (non subsidi)",
+          "Warna pink untuk Urea Bersubsidi",
+          "Dikemas dalam kantong dengan isi 50 kg"
+        ],
+        "sifat": ["Higroskopis", "Mudah larut dalam air"],
+        "manfaat": [
+          "Membuat bagian tanaman lebih hijau dan segar",
+          "Mempercepat pertumbuhan",
+          "Menambah kandungan protein hasil panen"
+        ],
+        "gejalaKekurangan": [
+          "Seluruh tanaman berwarna pucat kekuningan",
+          "Pertumbuhan tanaman lambat dan kerdil",
+          "Daun tua berwarna kekuningan. Pada tanaman padi dimulai dari ujung daun menjalar ke tulang daun",
+          "Pertumbuhan buah tidak sempurna seringkali masak sebelum waktunya",
+          "Jika dalam keadaan kekurangan yang parah daun menjadi kering dimulai dari bagian bawah tanaman terus ke bagian atas tanaman."
+        ]
+      }
+    },
+    {
+      "nama": "SP36",
+      "title": "Pupuk SP-36",
+      
+      "color": [
+        "747474",
+        "011d0d",
+        "034f23"
+      ],
+      "penjelas": "PT. Petrokimia Gresik",
+      "image": "assets/images/product/subnonsub_sp36.png",
+      "brosure": ["assets/images/brosure/sp36_1.jpg"],
+      "informasi": {
+        "spesifikasi": [
+          "Kadar P2O5 total minimal 36%",
+          "Kadar P2O5 larut Asam Sitrat minimal 34%",
+          "Kadar P2O5 larut dalam air minimal 30%",
+          "Kadar air maksimal 5%",
+          "Kadar Asam Bebas sebagai H3PO4 maksimal 6%",
+          "Bentuk butiran",
+          "Warna abu-abu",
+          "Dikemas dalam kantong bercap Kerbau Emas dengan isi 50 kg"
+        ],
+        "sifat": ["Tidak higroskopis", "Mudah larut dalam air"],
+        "manfaat": [
+          "Sebagai sumber unsur hara Fosfor bagi tanaman",
+          "Memacu pertumbuhan akar dan sistim perakaran yang baik",
+          "Memacu pembentukan bunga dan masaknya buah/biji",
+          "Mempercepat panen",
+          "Memperbesar prosentase terbentuknya bunga menjadi buah/biji",
+          "Menambah daya tahan tanaman terhadap gangguan hama, penyakit dan kekeringan"
+        ],
+        "gejalaKekurangan": [
+          "Seluruh tanaman berwarna pucat kekuningan",
+          "Pertumbuhan tanaman lambat dan kerdil"
+        ]
+      }
+    },
+    {
+      "nama": "KCL",
+      "title": "Pupuk KCL",
+      
+      "color": [
+        "e3b500",
+        "011d0d",
+        "034f23"
+      ],
+      "penjelas": "PT. Petrokimia Gresik",
+      "image": "assets/images/product/KCL.png",
+      "brosure": ["assets/images/brosure/KCL.png"],
+      "informasi": {
+        "spesifikasi": [
+          "Kadar K2O : 60%",
+          "Warna : Merah / Putih",
+          "Bentuk : Kristal"
+        ],
+        "sifat": ["Larut dalam air"],
+        "manfaat": [
+          "Membuat tanaman lebih tegak dan kokoh",
+          "Meningkatkan daya tahan tanaman terhadap serangan hama, penyakit, dan kekeringan",
+          "Meningkatkan pembentukan gula dan pati",
+          "Meningkatkan ketahanan hasil panen selama pengangkutan dan penyimpanan"
+        ],
+        "gejalaKekurangan": [
+          "Daun Pucat diujung daun",
+          "Daun mudah gugur"
+        ]
+      }
+    },
+    {
+      "nama": "Phonska Plus",
+      "title": "Phonska Plus",
+      
+      "color": [
+        "d11e25",
+        "011d0d",
+        "034f23"
+      ],
+      "penjelas": "PT. Petrokimia Gresik",
+      "image": "assets/images/product/phonska-plus.png",
+      "brosure": ["assets/images/brosure/phonskaplus_1.jpg"],
+      "informasi": {
+        "spesifikasi": [
+          "N (Nitrogen) : 15%",
+          "P2O5 (Fosfat) : 15%",
+          "K (Kalium) : 15%",
+          "S (Sulfur) : 9%",
+          "Zn (Zink) : 2.000 ppm",
+          "Bentuk : Granul",
+          "Warna : Putih (Natural White)",
+          "Kemasan : 25kg"
+        ],
+        "sifat": ["Larut dalam air"],
+        "manfaat": [
+          "Pupuk Majemuk NPK yang diperkaya dengan unsur Sulfur dan Zink",
+          "Meningkatkan efektifitas & efisiensi penggunaan pupuk",
+          "Meningkatkan jumlah & mutu hasil panen",
+          "Hasil racikan bahan baku melalui proses yang tepat sehingga menghasilkan kualitas campuran produk yang homogen"
+        ],
+        "gejalaKekurangan": [""]
+      }
+    },
+    {
+      "nama": "Ningrat",
+      "title": "Petro Ningrat",
+      
+      "color": [
+        "917735",
+        "011d0d",
+        "034f23"
+      ],
+      "penjelas": "PT. Petrokimia Gresik",
+      "image": "assets/images/product/ningrat.png",
+      "brosure": ["assets/images/brosure/ningrat_1.jpg"],
+      "informasi": {
+        "spesifikasi": [
+          "N (Nitrogen) : 12%",
+          "P2O5 (Fosfat) : 11 %,",
+          "K2O (Kalium) : 20%"
+        ],
+        "sifat": ["Larut dalam air"],
+        "manfaat": [
+          "Memiliki unsur hara yang sesuai dengan kebutuhan tanaman tembakau dan tanaman holtikultura",
+          "Rendah hara chlor (Cl) sehingga meningkatkan kualitas daun tembakau serta kualitas tanaman hortikultura sensitif chlor",
+          "Memperbaiki warna, aroma, rasa, dan kelenturan tembakau",
+          "Membuat tanaman tegak dan kokoh serta lebih tahan serangan hama penyakit",
+          "Merangsang pertumbuhan umbi dan buah",
+          "Cocok untuk lahan kering",
+          "Mengandung Nitrogen (N) berbasis Nitrat (NO3) yang mudah diserap tanaman"
+        ],
+        "gejalaKekurangan": [""]
+      }
+    },
+    {
+      "nama": "Nitrat",
+      "title": "Petro Nitrat",
+      
+      "color": [
+        "005a82",
+        "011d0d",
+        "034f23"
+      ],
+      "penjelas": "PT. Petrokimia Gresik",
+      "image": "assets/images/product/nitrat.png",
+      "brosure": ["assets/images/brosure/nitrat_1.jpg"],
+      "informasi": {
+        "spesifikasi": [
+          "N (Nitrogen) : 16%",
+          "P2O5 (Fosfat) : 16 %,",
+          "K2O (Kalium) : 16%"
+        ],
+        "sifat": ["Larut dalam air"],
+        "manfaat": [
+          "Mengandung Nitrogen bentuk Nitrat",
+          "Unsur hara tersedia bagi tanaman",
+          "Kandungan Hara NPK Seimbang"
+        ],
+        "gejalaKekurangan": [""]
+      }
+    },
+    {
+      "nama": "BioFertil",
+      "title": "Petro Bio Fertil",
+      
+      "color": [
+        "049942",
+        "011d0d",
+        "034f23"
+      ],
+      "penjelas": "PT. Petrokimia Gresik",
+      "image": "assets/images/product/Biofertille.png",
+      "brosure": [
+        "assets/images/brosure/biofertil_1.jpg",
+        "assets/images/brosure/biofertil_2.jpg"
+      ],
+      "informasi": {
+        "spesifikasi": [
+          "Bahan Aktif :\nMikroba penambat N dan penghasil zat pengatur tumbuh (ZPT)\nMikroba pelarut fosfat.\nMikroba perombak bahan organik.",
+          "Bahan Pembawa : Mineral dan bahan organik",
+          "Warna : Kecoklatan",
+          "Bentuk : Granul",
+          "Kemasan : 2kg, 5kg, dan 10kg",
+          "Masa simpan : 1 (satu) tahun"
+        ],
+        "sifat": ["Larut dalam air"],
+        "manfaat": [
+          "Mengefektifkan penggunaan pupuk an-organik, khususnya N dan P",
+          "Meningkatkan ketersediaan hara N dan P dalam tanah sehingga meningkatkan hasil panen."
+        ],
+        "gejalaKekurangan": [""]
+      }
+    },
+    {
+      "nama": "ZA",
+      "title": "Pupuk ZA",
+      
+      "color": [
+        "e3b500",
+        "011d0d",
+        "034f23"
+      ],
+      "penjelas": "PT. Petrokimia Gresik",
+      "image": "assets/images/product/subnonsub_za.png",
+      "brosure": ["assets/images/brosure/za_1.jpg"],
+      "informasi": {
+        "spesifikasi": [
+          "Nitrogen minimal 20,8%",
+          "belerang minimal 23,8%",
+          "Kadar air maksimal 1%",
+          "kadar Asam Bebas sebagai H2SO4 maksimal 0,1%",
+          "Bentuk kristal",
+          "Warna putih",
+          "Warna orange untuk ZA bersubsidi",
+          "Dikemas dalam kantong bercap Kerbau Emas dengan isi 50 kg"
+        ],
+        "sifat": ["Larut dalam air"],
+        "manfaat": [
+          "Meningkatkan produksi hasil tebu & hablur gula (Rendeman)",
+          "Meningkatkan kelas mutu hasil panen dengan memperbaiki warna, aroma, rasa, dan besar umbi serta lebih kesat",
+          "Membantu tanaman lebih hijau",
+          "Unsur hara tersedia bagi tanaman",
+          "Membuat tanaman lebih hijau segar",
+          "Mempercepat dan m eningkatkan pertumbuhan tanaman yaitu tinggi tanaman, jumlah cabang, dan jumlah anakan",
+          "Meningkatkan kandungan protein hasil panen"
+        ],
+        "gejalaKekurangan": [""]
+      }
+    },
+    {
+      "nama": "Phonska",
+      "title": "Phonska",
+      
+      "color": [
+        "007cc3",
+        "011d0d",
+        "034f23"
+      ],
+      "penjelas": "PT. Petrokimia Gresik",
+      "image": "assets/images/product/PHONSKA.png",
+      "brosure": [
+        "assets/images/brosure/phonska_1.jpg",
+        "assets/images/brosure/phonska_2.jpg"
+      ],
+      "informasi": {
+        "spesifikasi": [
+          "N (Nitrogen) : 15%",
+          "P2O5 (Fosfat) : 15%",
+          "K (Kalium) : 15%",
+          "S (Sulfur) : 10%",
+          "Bentuk granul",
+          "Warna pink/merah muda",
+          "Kemasan 50kg"
+        ],
+        "sifat": ["Larut dalam air"],
+        "manfaat": [
+          "Unsur hara tersedia bagi tanaman",
+          "Kandungan Hara NPK Seimbang"
+        ],
+        "gejalaKekurangan": [""]
+      }
+    },
+    {
+      "nama": "Petroganik",
+      "title": "Pupuk Petroganik",
+      
+      "color": [
+        "84c225",
+        "011d0d",
+        "034f23"
+      ],
+      "penjelas": "PT. Petrokimia Gresik",
+      "image": "assets/images/product/PETROGANIK.png",
+      "brosure": [
+        "assets/images/brosure/petroganik_1.jpg",
+        "assets/images/brosure/petroganik_2.jpg"
+      ],
+      "informasi": {
+        "spesifikasi": [
+          "C-organik : Minimal 15%",
+          "C/N : ratio 15 - 25",
+          "Kadar air : Maksimal 8-20%",
+          "pH : 4 - 9",
+          "Warna : Coklat kehitaman",
+          "Bentuk : Granul",
+          "Padi dan Palawijaya : 500 - 1.000 kg per ha",
+          "Hortikultura : 2.000 kg per ha",
+          "Tanaman keras : 3 kg per pohon",
+          "Tambak : 300 - 500 kg per ha",
+          "Penggunaan: Penggunaan pupuk Petroganik pada tanaman pangan dan hortikultura diberikan seluruhnya pada pemupukan dasar, sedangkan pada tanaman keras diberikan pada awal dan akhir musim hujan"
+        ],
+        "sifat": ["Larut dalam air"],
+        "manfaat": [
+          "Memperbaiki struktur dan tata udara tanah sehingga penyerapan unsur hara oleh akar tanaman menjadi lebih baik",
+          "Meningkatkan daya sangga air tanah sehingga ketersediaan air dalam tanah menjadi lebih baik",
+          "Menjadi penyangga unsur hara dalam tanah sehingga pemupukan menjadi lebih efisien",
+          "Sesuai untuk semua jenis tanah dan jenis tanaman",
+          "Kadar C-organik tinggi",
+          "Berbentuk granul sehingga mudah dalam aplikasi",
+          "Aman dan ramah lingkungan (bebas mikroba patogen)",
+          "Bebas dari biji-bijian gulma",
+          "Kadar air rendah sehingga lebih efisien dalam pengangkutan dan penyimpanan",
+          "Dikemas dalam kantong kedap air"
+        ],
+        "gejalaKekurangan": [""]
+      }
+    },
+    {
+      "nama":"Spesifikasi Komoditi",
+      "title": "Pupuk Spesifikasi Komoditi",
+      "color": [
+        "ec9500",
+        "011d0d",
+        "034f23"
+      ],
+      "penjelas": "PT. Petrokimia Gresik",
+      "image": "assets/images/product/npk-kebomas.png",
+      "brosure": ["assets/images/brosure/kebomas_1.jpg"],
+      "informasi": {
+        "spesifikasi": [
+          "Teknologi pupuk dan pemupukan berkembang ke arah peningkatan efisiensi pemupukan, sehingga untuk mengefisienkan penggunaan pupuk dibutuhkan formula pupuk yang sesuai yaitu pupuk spesifik komoditi dan spesifik lokasi"
+        ],
+        "sifat": ["Larut dalam air"],
+        "manfaat": [
+          "Aplikasi pemupukan lebih praktis karena tidak perlu mencampur beberapa jenis pupuk tunggal",
+          "Mampu meningkatkan efisiensi dan efektivitas penggunaan pupuk",
+          "Mampu meningkatkan jumlah dan mutu hasil pertanian",
+          "Formula, bentuk, dan jenis bahan baku menyesuaikan permintaan konsumen",
+          "Antisipasi dan atasi masalah jika terjadi kelangkaan salah satu jenis pupuk tunggal",
+          "Memudahkan transportasi, penyimpanan, dan penanganan lainnya"
+        ],
+        "gejalaKekurangan": [""],
+        "Formula": [
+          "Beberapa formula pupuk spesifik komoditi dan spesifik lokasi antara lain",
+          "NPK 10-11-10-4Mg : Kakao",
+          "NPK 12-10-16-2Mg : Lada",
+          "NPK 12-6-22-3Mg : Kelapa Sawit",
+          "NPK 13-6-27-4Mg-0,65B : Kelapa Sawit",
+          "Petro Kalimas : Hortikultura",
+          "Petromina (NP 20-10) : Tambak",
+          "NPK 20-6-6 : Tebu dan padi",
+          "NPK 15-15-6-4Mg : Kelapa sawit",
+          "NPK 12-12-17-2Mg : Kelapa sawit",
+          "NPK 12-12-12 : Padi, jagung",
+          "NPK 17-0-28 : Kelapa sawit",
+          "NPK 10-15-20-1TE-0,1HA : Kelapa sawit",
+          "NPK 12-11-20 (bebas Chlor) : Tembakau",
+          "NPK 14-13-9-2,5Mg : Kelapa Sawit"
+        ]
+      }
+    },
+    {
+      "nama":"ZK",
+      "title": "Pupuk ZK",
+      
+      "color": [
+        "ee5f00",
+        "011d0d",
+        "034f23"
+      ],
+      "penjelas": "PT. Petrokimia Gresik",
+      "image": "assets/images/product/ZK.png",
+      "brosure": ["assets/images/brosure/zk_1.jpg"],
+      "informasi": {
+        "spesifikasi": [
+          "Kalium K20 : 50%",
+          "Sulfur : 17%",
+          "Bentuk Warna : Serbuk Putih",
+          "Kelarutan dalam Air : 9,205gr / 100ml H20"
+        ],
+        "sifat": ["Larut dalam air"],
+        "manfaat": [
+          "Sumber Unsur Kalium (K) dan Belerang (S) dengan kadar tinggi",
+          "Aman digunakan untuk semua jenis tanaman",
+          "Larut dalam air dan mudah diserap tanaman",
+          "Dapat dicampur dengan pupuk lainnya",
+          "Tidak mudah menyerap air",
+          "Meningkatkan penyerapan unsur hara khususnya Nitrogen dan fosfor"
+        ],
+        "gejalaKekurangan": [""]
+      }
+    },
+    {
+      "nama":"Rock Phospate",
+      "title": "Pupuk Rock Phospate",
+      
+      "color": [
+        "e0c691",
+        "011d0d",
+        "034f23"
+      ],
+      "penjelas": "PT. Petrokimia Gresik",
+      "image": "assets/images/product/Phosphate.png",
+      "brosure": ["assets/images/brosure/rockphosphate_1.jpg"],
+      "informasi": {
+        "spesifikasi": [
+          "Kadar P2O5 : min. 28%",
+          "Kadar air : maks. 1,59%",
+          "Warna : kuning abu-abu",
+          "Bentuk : Tepung",
+          "Kemasan : karung plastik dengan berat 50 kg"
+        ],
+        "sifat": ["Larut dalam air"],
+        "manfaat": [
+          "Memacu pertumbuhan akar dan pembentukan perakaran yang baik",
+          "Mempercepat pembentukan bunga serta masaknya buah dan biji",
+          "Meningkatkan komponen hasil panen tanaman biji-bijian"
+        ],
+        "gejalaKekurangan": [""]
+      }
+    },
+    {
+      "nama":"Niphos",
+      "title": "Petro Niphos",
+      
+      "color": [
+        "ee8506",
+        "011d0d",
+        "034f23"
+      ],
+      "penjelas": "PT. Petrokimia Gresik",
+      "image": "assets/images/product/NPS.png",
+      "brosure": [
+        "assets/images/brosure/niphos_1.jpg",
+        "assets/images/brosure/niphos_2.jpg"
+      ],
+      "informasi": {
+        "spesifikasi": [
+          "N (Nitrogen) : 20%",
+          "P2O5 (Fosfat) : 20%",
+          "S (Sulfur) : 13%"
+        ],
+        "sifat": ["Larut dalam air"],
+        "manfaat": [
+          "Diperkaya dengan unsur Nitrogen, Fosfat, dan Sulfur",
+          "Larut dalam air (mudah untuk aplikasi kocor)",
+          "Meningkatkan efisiensi dan efektifitas penggunaan pupuk",
+          "Meningkatkan jumlah dan mutu hasil panen",
+          "Hasil racikan bahan baku melalui proses produksi yang tepat sehingga menghasilkan kualitas campuran produk yang homogen"
+        ],
+        "gejalaKekurangan": [""]
+      }
+    }
+  ],
+  "peptisida":[
+    {
+      "nama":"Insektisida",
+      "title": "Insektisida",
+      "color": [
+        "ee8506",
+        "011d0d",
+        "034f23"
+      ],
+      "penjelas": "Peptisida untuk hama tikus",
+      "image": "assets/images/product/sidat_insektisida.png",
+      "brosure": ["assets/images/brosure/urea_1.jpg"],
+      "informasi": {
+        "spesifikasi": [
+          "Kadar air maksimal 0,50%",
+          "Kadar Biuret maksimal 1%",
+          "Kadar Nitrogen minimal 46%",
+          "Bentuk butiran tidak berdebu",
+          "Warna putih (non subsidi)",
+          "Warna pink untuk Urea Bersubsidi",
+          "Dikemas dalam kantong dengan isi 50 kg"
+        ],
+        "sifat": ["Higroskopis", "Mudah larut dalam air"],
+        "manfaat": [
+          "Membuat bagian tanaman lebih hijau dan segar",
+          "Mempercepat pertumbuhan",
+          "Menambah kandungan protein hasil panen"
+        ],
+        "gejalaKekurangan": [
+          "Seluruh tanaman berwarna pucat kekuningan",
+          "Pertumbuhan tanaman lambat dan kerdil",
+          "Daun tua berwarna kekuningan. Pada tanaman padi dimulai dari ujung daun menjalar ke tulang daun",
+          "Pertumbuhan buah tidak sempurna seringkali masak sebelum waktunya",
+          "Jika dalam keadaan kekurangan yang parah daun menjadi kering dimulai dari bagian bawah tanaman terus ke bagian atas tanaman."
+        ]
+      }
+    },
+    {
+      "nama":"Moluskisida",
+      "title": "Moluskisida",
+      "color": [
+        "ee8506",
+        "011d0d",
+        "034f23"
+      ],
+      "penjelas": "Peptisida untuk hama tikus",
+      "image": "assets/images/product/musi.png",
+      "brosure": ["assets/images/brosure/urea_1.jpg"],
+      "informasi": {
+        "spesifikasi": [
+          "Kadar air maksimal 0,50%",
+          "Kadar Biuret maksimal 1%",
+          "Kadar Nitrogen minimal 46%",
+          "Bentuk butiran tidak berdebu",
+          "Warna putih (non subsidi)",
+          "Warna pink untuk Urea Bersubsidi",
+          "Dikemas dalam kantong dengan isi 50 kg"
+        ],
+        "sifat": ["Higroskopis", "Mudah larut dalam air"],
+        "manfaat": [
+          "Membuat bagian tanaman lebih hijau dan segar",
+          "Mempercepat pertumbuhan",
+          "Menambah kandungan protein hasil panen"
+        ],
+        "gejalaKekurangan": [
+          "Seluruh tanaman berwarna pucat kekuningan",
+          "Pertumbuhan tanaman lambat dan kerdil",
+          "Daun tua berwarna kekuningan. Pada tanaman padi dimulai dari ujung daun menjalar ke tulang daun",
+          "Pertumbuhan buah tidak sempurna seringkali masak sebelum waktunya",
+          "Jika dalam keadaan kekurangan yang parah daun menjadi kering dimulai dari bagian bawah tanaman terus ke bagian atas tanaman."
+        ]
+      }
+    },
+    {"nama": "Herbisida",
+      "title": "Herbisida",
+      "color": [
+        "ee8506",
+        "011d0d",
+        "034f23"
+      ],
+      "penjelas": "Peptisida untuk hama gulma",
+      "image": "assets/images/product/product_petro.png",
+      "brosure": ["assets/images/brosure/urea_1.jpg"],
+      "informasi": {
+        "spesifikasi": [
+          "Kadar air maksimal 0,50%",
+          "Kadar Biuret maksimal 1%",
+          "Kadar Nitrogen minimal 46%",
+          "Bentuk butiran tidak berdebu",
+          "Warna putih (non subsidi)",
+          "Warna pink untuk Urea Bersubsidi",
+          "Dikemas dalam kantong dengan isi 50 kg"
+        ],
+        "sifat": ["Higroskopis", "Mudah larut dalam air"],
+        "manfaat": [
+          "Membuat bagian tanaman lebih hijau dan segar",
+          "Mempercepat pertumbuhan",
+          "Menambah kandungan protein hasil panen"
+        ],
+        "gejalaKekurangan": [
+          "Seluruh tanaman berwarna pucat kekuningan",
+          "Pertumbuhan tanaman lambat dan kerdil",
+          "Daun tua berwarna kekuningan. Pada tanaman padi dimulai dari ujung daun menjalar ke tulang daun",
+          "Pertumbuhan buah tidak sempurna seringkali masak sebelum waktunya",
+          "Jika dalam keadaan kekurangan yang parah daun menjadi kering dimulai dari bagian bawah tanaman terus ke bagian atas tanaman."
+        ]
+      }
+    },
+    {
+      "nama": "Rodentisida",
+      "title": "Rodentisida",
+      "color": [
+        "ee8506",
+        "011d0d",
+        "034f23"
+      ],
+      "penjelas": "Peptisida untuk hama tikus",
+      "image": "assets/images/product/sidat.png",
+      "brosure": ["assets/images/brosure/urea_1.jpg"],
+      "informasi": {
+        "spesifikasi": [
+          "Kadar air maksimal 0,50%",
+          "Kadar Biuret maksimal 1%",
+          "Kadar Nitrogen minimal 46%",
+          "Bentuk butiran tidak berdebu",
+          "Warna putih (non subsidi)",
+          "Warna pink untuk Urea Bersubsidi",
+          "Dikemas dalam kantong dengan isi 50 kg"
+        ],
+        "sifat": ["Higroskopis", "Mudah larut dalam air"],
+        "manfaat": [
+          "Membuat bagian tanaman lebih hijau dan segar",
+          "Mempercepat pertumbuhan",
+          "Menambah kandungan protein hasil panen"
+        ],
+        "gejalaKekurangan": [
+          "Seluruh tanaman berwarna pucat kekuningan",
+          "Pertumbuhan tanaman lambat dan kerdil",
+          "Daun tua berwarna kekuningan. Pada tanaman padi dimulai dari ujung daun menjalar ke tulang daun",
+          "Pertumbuhan buah tidak sempurna seringkali masak sebelum waktunya",
+          "Jika dalam keadaan kekurangan yang parah daun menjadi kering dimulai dari bagian bawah tanaman terus ke bagian atas tanaman."
+        ]
+      }
+    }
+  ]
+}]
